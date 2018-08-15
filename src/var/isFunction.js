@@ -1,6 +1,10 @@
 define( function() {
 	"use strict";
 
+  // 返回 isFunction 方法
+  // 判断是否为函数对象
+  // typeof obj.nodeType !== "number" 这段代码下面有相关英文注释，同时也可以学习以下介绍
+  // MDN: https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType
 	return function isFunction( obj ) {
 
       // Support: Chrome <=57, Firefox <=52
