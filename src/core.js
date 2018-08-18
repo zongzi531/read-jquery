@@ -142,7 +142,12 @@ jQuery.fn = jQuery.prototype = {
 		// jQuery.map 传入当前元素集和回调函数
 		// 返回出来的新数组再调用 pushStack 方法
 		// 将旧的元素集赋值到 ret.prevObject
-		// 但是我去实践了一下，为什么$('div').map((index, item) => item)，index和item的位置是反的？
+		// MDN: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call
+		// fun.call(thisArg, arg1, arg2, ...)
+		// thisArg 在fun函数运行时指定的this值。需要注意的是，指定的this值并不一定是该函数执行时真正的this值，如果这个函数处于非严格模式下，则指定为null和undefined的this值会自动指向全局对象(浏览器中就是window对象)，同时值为原始值(数字，字符串，布尔值)的this会指向该原始值的自动包装对象。
+		// 所以 callback.call( elem, i, elem ) 第一个 elem 为绑定 function 内作用域
+		// 接受参数 i, elem
+		// 所以 $('div').map((index, item) => item)
 		return this.pushStack( jQuery.map( this, function( elem, i ) {
 			return callback.call( elem, i, elem );
 		} ) );
@@ -414,7 +419,7 @@ jQuery.extend( {
 			length = obj.length;
 			// 遍历 length
 			for ( ; i < length; i++ ) {
-				// callback 接受三个参数 obj[ i ], i, obj[ i ]
+				// callback 接受两个参数 i, obj[ i ]
 				// 若有一次 callback 返回 false 则 break 退出此次遍历
 				if ( callback.call( obj[ i ], i, obj[ i ] ) === false ) {
 					break;
