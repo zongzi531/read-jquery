@@ -91,13 +91,18 @@ jQuery.filter = function( expr, elems, not ) {
 };
 
 // 在此执行 extend 方法，为 jQuery 添加属性
-// 暂时读到这里
 jQuery.fn.extend( {
+	// 描述: 通过一个选择器，jQuery对象，或元素过滤，得到当前匹配的元素集合中每个元素的后代。
 	find: function( selector ) {
+		// 初始化 i, ret
+		// 声明 len = 当前jQuery元素集长度
+		// 声明 self 备份 this
 		var i, ret,
 			len = this.length,
 			self = this;
 
+		// 若 selector 不为 String 类型
+		// 然后下面的 暂时看不懂
 		if ( typeof selector !== "string" ) {
 			return this.pushStack( jQuery( selector ).filter( function() {
 				for ( i = 0; i < len; i++ ) {
@@ -116,13 +121,29 @@ jQuery.fn.extend( {
 
 		return len > 1 ? jQuery.uniqueSort( ret ) : ret;
 	},
+	// 描述: 筛选元素集合中匹配表达式 或 通过传递函数测试的 那些元素集合。
 	filter: function( selector ) {
+		// 传入 当前jQuery元素集，选择器，not值为 false
+		// 将返回数组调用 pushStack 方法
+		// 旧的 jQuery元素集 将绑定至 prevObject 对象
 		return this.pushStack( winnow( this, selector || [], false ) );
 	},
+	// 描述: 从匹配的元素集合中移除指定的元素。
 	not: function( selector ) {
+		// 传入 当前jQuery元素集，选择器，not值为 true
+		// 将返回数组调用 pushStack 方法
+		// 旧的 jQuery元素集 将绑定至 prevObject 对象
 		return this.pushStack( winnow( this, selector || [], true ) );
 	},
+	// 描述: 判断当前匹配的元素集合中的元素，是否为一个选择器，DOM元素，或者jQuery对象，如果这些元素至少一个匹配给定的参数，那么返回true。
 	is: function( selector ) {
+		// 传入 当前jQuery元素集，选择器，not值为 false
+		// 选择器必须为 String 类型
+		// 使用正则表达式去校验选择器，若返回为真
+		// jQuery( selector ) 获得该选择器元素集
+		// 反之 直接传入选择器或者空数组
+		// 最后对 winnow 方法返回的数组 获取长度
+		// 然后使用 !! 操作符进行 布尔值转换
 		return !!winnow(
 			this,
 
