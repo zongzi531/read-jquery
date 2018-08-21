@@ -6,13 +6,23 @@ define( [
 ], function( jQuery, toType, isFunction, rnothtmlwhite ) {
 
 "use strict";
+	// require core.js 获得 jQuery
+	// require core/toType.js 获得 toType 方法
+	// require var/isFunction.js 获得 isFunction 方法
+	// require var/rnothtmlwhite.js 获得 正则表达式
 
 // Convert String-formatted options into Object-formatted ones
+// 将字符串格式化选项转换为对象格式化选项
+// 声明 createOptions 方法
 function createOptions( options ) {
+	// 声明 object = {}
 	var object = {};
+	// 使用 jQuery.each 去遍历 options.match( rnothtmlwhite ) || []
+	// 将遍历内容 flag 存放至 object 并标记为 true
 	jQuery.each( options.match( rnothtmlwhite ) || [], function( _, flag ) {
 		object[ flag ] = true;
 	} );
+	// 返回 object
 	return object;
 }
 
@@ -38,6 +48,25 @@ function createOptions( options ) {
  *	stopOnFalse:	interrupt callings when a callback returns false
  *
  */
+/*
+ * 使用以下参数创建回调列表：
+ *
+ * 选项：一个可选的空间分隔选项列表，将改变回调列表的行为或更传统的选项对象
+ *
+ * 默认情况下，回调列表将起到事件回调列表的作用，并且可以是多次“发射”。
+ *
+ * 可能的选择：
+ *
+ * once：将确保回调列表只能被触发一次（如延迟）
+ *
+ * memory：将跟踪以前的值，并调用任何回调添加 在名单被用最新的“记忆”开除之后值（如延迟）
+ *
+ * unique：将确保回调只能添加一次（没有重复列表）
+ *
+ * stopOnFalse：当回调返回false时中断调用
+ *
+ */
+ // 暂时到这里吧……
 jQuery.Callbacks = function( options ) {
 
 	// Convert options from String-formatted to Object-formatted if needed
