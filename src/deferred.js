@@ -7,53 +7,85 @@ define( [
 
 "use strict";
 
+	// require core.js 获得 jQuery
+	// require var/isFunction.js 获得 isFunction 方法
+	// require var/slice.js 获得 Array.prototype.slice 方法
+	// require callbacks.js
+// 声明 Identity 方法
 function Identity( v ) {
+	// 返回 v
 	return v;
 }
+// 声明 Thrower 方法
 function Thrower( ex ) {
+	// 抛出 ex 异常
 	throw ex;
 }
 
+// 声明 adoptValue 方法
 function adoptValue( value, resolve, reject, noValue ) {
+	// 初始化 method
 	var method;
 
 	try {
 
 		// Check for promise aspect first to privilege synchronous behavior
+		// 检查允诺方面优先特权同步行为
+		// 检查 value 是否存在 并且 value.promise 是否为 function
+		// 绑定至 method
 		if ( value && isFunction( ( method = value.promise ) ) ) {
+			// method 绑定 value 执行
+			// 链式调用 done 和 fail
 			method.call( value ).done( resolve ).fail( reject );
 
 		// Other thenables
+		// 另外 thenables 对象
+		// 检查 value 是否存在 并且 value.then 是否为 function
 		} else if ( value && isFunction( ( method = value.then ) ) ) {
+			// then 方法传入 resolve, reject 执行
 			method.call( value, resolve, reject );
 
 		// Other non-thenables
+		// 另外 no thenables 对象
 		} else {
 
 			// Control `resolve` arguments by letting Array#slice cast boolean `noValue` to integer:
+			// 通过 Array#slice 将布尔值 “noValue” 转换成整数来控制 “resolve” 参数
 			// * false: [ value ].slice( 0 ) => resolve( value )
 			// * true: [ value ].slice( 1 ) => resolve()
+			// resolve([ value ].slice( noValue )) 看上面
 			resolve.apply( undefined, [ value ].slice( noValue ) );
 		}
 
 	// For Promises/A+, convert exceptions into rejections
+	// 对于 Promises/A+，将异常转换为拒绝
 	// Since jQuery.when doesn't unwrap thenables, we can skip the extra checks appearing in
 	// Deferred#then to conditionally suppress rejection.
+	// 由于 jQuery.when 没有打开 thenables ，所以我们可以跳过 Deferred#then 中出现的额外检查来有条件地抑制拒绝。
 	} catch ( value ) {
 
 		// Support: Android 4.0 only
 		// Strict mode functions invoked without .call/.apply get global-object context
+		// 没有 .call/.apply 方法 GET全局对象上下文调用的严格模式函数
+		// reject([ value ])
 		reject.apply( undefined, [ value ] );
 	}
 }
 
 jQuery.extend( {
 
+	// Deferred
 	Deferred: function( func ) {
+		// 声明 tuples
 		var tuples = [
 
 				// action, add listener, callbacks,
 				// ... .then handlers, argument index, [final state]
+				// 我拿 这个数组举例：
+				// [ "resolve", "done        ", jQuery.Callbacks( "once memory" ), jQuery.Callbacks( "once memory" ), 0             , "resolved   " ]
+				// [ "action ", "add listener", callbacks                        , .then handlers                   , argument index, [final state] ]
+				// [ "操作   ", "添加侦听器    ", 回调                              , .then 处理程序                    , 参数索引        , [  最终状态  ] ]
+				// 我是这么理解他这个注释的
 				[ "notify", "progress", jQuery.Callbacks( "memory" ),
 					jQuery.Callbacks( "memory" ), 2 ],
 				[ "resolve", "done", jQuery.Callbacks( "once memory" ),
@@ -61,40 +93,75 @@ jQuery.extend( {
 				[ "reject", "fail", jQuery.Callbacks( "once memory" ),
 					jQuery.Callbacks( "once memory" ), 1, "rejected" ]
 			],
+			// 声明 state = "pending"
 			state = "pending",
+			// 声明 promise 对象
 			promise = {
+				// state 方法
 				state: function() {
+					// 返回 state
 					return state;
 				},
+				// always 方法
 				always: function() {
+					// 再执行一遍 done 方法和 fail 方法
+					// 传入 arguments
+					// 原来 always 方法是这样写的 有点意思
 					deferred.done( arguments ).fail( arguments );
+					// 返回 this
 					return this;
 				},
+				// catch 方法
 				"catch": function( fn ) {
+					// 学过 Promise 的就知道， catch 就是 then 的第二参数的快捷写法
+					// 返回 promise.then( null, fn )
 					return promise.then( null, fn );
 				},
 
 				// Keep pipe for back-compat
+				// 保持背部的管子
+				// pipe 方法
 				pipe: function( /* fnDone, fnFail, fnProgress */ ) {
+					// 看起来 像是接受参数 fnDone, fnFail, fnProgress
+					// 声明 fns 赋值 arguments
 					var fns = arguments;
 
+					// 返回 jQuery.Deferred 在调用 promise 执行的方法
+					// Deferred 本身就接受一个参数 func
 					return jQuery.Deferred( function( newDefer ) {
+						// 使用 jQuery.each 去遍历 tuples 返回 i, tuple
 						jQuery.each( tuples, function( i, tuple ) {
 
 							// Map tuples (progress, done, fail) to arguments (done, fail, progress)
+							// Map tuples（进度、完成、失败）到参数（完成、失败、进展）
+							// 首先看下 tuple[ 4 ] 是个什么东西
+							// tuple[ 4 ] 是 .then handlers （.then 处理程序）
+							// .then 处理程序 需要是 function 然后赋值给 fn
 							var fn = isFunction( fns[ tuple[ 4 ] ] ) && fns[ tuple[ 4 ] ];
 
 							// deferred.progress(function() { bind to newDefer or newDefer.notify })
 							// deferred.done(function() { bind to newDefer or newDefer.resolve })
 							// deferred.fail(function() { bind to newDefer or newDefer.reject })
+							// tuple[ 1 ] 是 add listener（添加侦听器）
+							// 调用 deferred 对应的 侦听器 看上面默认的三个注释
 							deferred[ tuple[ 1 ] ]( function() {
+								// 声明 returned 为 fn 存在并且 fn(arguments)
+								// 此 arguments 为当前作用域内的 arguments
 								var returned = fn && fn.apply( this, arguments );
+								// 判断 若 returned 存在 并且 returned.promise 是 function
 								if ( returned && isFunction( returned.promise ) ) {
+									// 执行 returned.promise()
+									// 然后链式调用这些
+									// 具体在干啥 我没看懂
 									returned.promise()
 										.progress( newDefer.notify )
 										.done( newDefer.resolve )
 										.fail( newDefer.reject );
 								} else {
+									// tuple[ 0 ] action（操作）
+									// 这个在干嘛呢 我也不知道
+									// 调用 newDefer[ tuple[ 0 ] + "With" ]
+									// 传入 this 和 fn ? [ returned ] : arguments
 									newDefer[ tuple[ 0 ] + "With" ](
 										this,
 										fn ? [ returned ] : arguments
@@ -102,6 +169,7 @@ jQuery.extend( {
 								}
 							} );
 						} );
+						// 释放 fns 内存
 						fns = null;
 					} ).promise();
 				},
@@ -395,5 +463,6 @@ jQuery.extend( {
 	}
 } );
 
+// 返回 jQuery
 return jQuery;
 } );
