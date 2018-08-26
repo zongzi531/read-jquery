@@ -12,10 +12,22 @@ define( [
 ], function( jQuery, indexOf, dir, siblings, rneedsContext, nodeName ) {
 
 "use strict";
+	// require core.js 获得 jQuery
+	// require var/indexOf.js 获得 Array.prototype.indexOf 方法
+	// require traversing/var/dir.js 获得 dir 方法
+	// require traversing/var/siblings.js 获得 siblings 方法
+	// require traversing/var/rneedsContext.js 获得 Sizzle.selectors
+	// require core/nodeName.js 获得 nodeName 方法
+	// require core/init.js
+	// require traversing/findFilter.js
+	// require selector.js
 
+// 声明 rparentsprev 为 正则表达式
 var rparentsprev = /^(?:parents|prev(?:Until|All))/,
 
 	// Methods guaranteed to produce a unique set when starting from a unique set
+	// 保证从唯一集合开始时生成唯一集合的方法
+	// 声明 guaranteedUnique 对象
 	guaranteedUnique = {
 		children: true,
 		contents: true,
@@ -23,9 +35,13 @@ var rparentsprev = /^(?:parents|prev(?:Until|All))/,
 		prev: true
 	};
 
+// 执行 jQuery.fn.extend 方法
 jQuery.fn.extend( {
+	// has 方法
 	has: function( target ) {
+		// 声明 targets 为 jQuery( target, this )
 		var targets = jQuery( target, this ),
+			// 声明 l 为 targets 长度
 			l = targets.length;
 
 		return this.filter( function() {
@@ -187,5 +203,6 @@ jQuery.each( {
 	};
 } );
 
+// 返回 jQuery
 return jQuery;
 } );
