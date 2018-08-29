@@ -14,164 +14,270 @@ define( [
 	slice, dataPriv, nodeName ) {
 
 "use strict";
+	// require core.js 获得 jQuery
+	// require var/document.js 获得 window.document
+	// require var/documentElement.js 获得 window.document.documentElement
+	// require var/isFunction.js 获得 isFunction 方法
+	// require var/rnothtmlwhite.js 获得 正则表达式
+	// require var/slice.js 获得 Array.prototype.slice 方法
+	// require data/var/dataPriv.js 获得 Data 的实例
+	// require core/nodeName.js 获得 nodeName 方法
+	// require core/init.js
+	// require selector.js
 
 var
+	// 声明 rkeyEvent 正则表达式 用来检测 键盘事件
 	rkeyEvent = /^key/,
+	// 声明 rmouseEvent 正则表达式 用来检测 鼠标事件
 	rmouseEvent = /^(?:mouse|pointer|contextmenu|drag|drop)|click/,
+	// 声明 rtypenamespace 正则表达式 （类型命名空间）
 	rtypenamespace = /^([^.]*)(?:\.(.+)|)/;
 
+// 声明 returnTrue 方法 返回 true
 function returnTrue() {
 	return true;
 }
 
+// 声明 returnFalse 方法 返回 false
 function returnFalse() {
 	return false;
 }
+// 这里 为什么要用函数呢？？？？
+// 直接 var returnFalse = false 不行嘛？
 
 // Support: IE <=9 only
 // See #13393 for more info
+// 声明 safeActiveElement 方法
 function safeActiveElement() {
 	try {
+		// 尝试 去返回 document.activeElement
+		// 若报错 则忽略
 		return document.activeElement;
 	} catch ( err ) { }
 }
 
+// 声明 on 方法
 function on( elem, types, selector, data, fn, one ) {
+	// 初始化 origFn, type
 	var origFn, type;
 
 	// Types can be a map of types/handlers
+	// 类型可以是类型/处理程序的映射。
+	// 判断 types 是否为 Object 类型
 	if ( typeof types === "object" ) {
 
 		// ( types-Object, selector, data )
+		// 判断 selector 是否不为 String 类型
 		if ( typeof selector !== "string" ) {
 
 			// ( types-Object, data )
+			// 若 data 不存在则取 selector
 			data = data || selector;
+			// selector = undefined
 			selector = undefined;
 		}
+		// 遍历 types 属性
 		for ( type in types ) {
+			// 递归调用 on 方法
+			// fn 参数传入 types[ type ]
 			on( elem, type, selector, data, types[ type ], one );
 		}
+		返回 elem
 		return elem;
 	}
 
+	// 若 data == null 并且 fn == null
 	if ( data == null && fn == null ) {
 
 		// ( types, fn )
+		// fn 赋值 selector
 		fn = selector;
+		// data = selector = undefined
 		data = selector = undefined;
+		// 若 fn == null 的情况
 	} else if ( fn == null ) {
+		// 若 selector 为 String 类型
 		if ( typeof selector === "string" ) {
 
 			// ( types, selector, fn )
+			// fn 赋值 data
 			fn = data;
+			// data = undefined
 			data = undefined;
+		// 若 selector 不为 String 类型
 		} else {
 
 			// ( types, data, fn )
+			// fn 赋值 data
 			fn = data;
+			// data 赋值 selector
 			data = selector;
+			// selector = undefined
 			selector = undefined;
 		}
 	}
+	// 若 fn === false
 	if ( fn === false ) {
+		// 赋值 fn = returnFalse 这是一个方法
 		fn = returnFalse;
+		// 若 fn 为 除了 false 以外的 使用 ! 操作符可以返回为真的
 	} else if ( !fn ) {
+		// 返回 elem
 		return elem;
 	}
 
+	// 若 one === 1
 	if ( one === 1 ) {
+		// origFn 赋值 fn
 		origFn = fn;
+		// fn 赋值 匿名函数
 		fn = function( event ) {
 
 			// Can use an empty set, since event contains the info
+			// 可以使用空集，因为事件包含信息
+			// 描述: 移除一个事件处理函数。
 			jQuery().off( event );
+			// 返回 origFn(arguments)
 			return origFn.apply( this, arguments );
 		};
 
 		// Use same guid so caller can remove using origFn
+		// 使用相同的GUID，调用方可以使用Orgfn删除
+		// 重新赋值 fn.guid 若 origFn.guid 存在 或者 jQuery.guid++
 		fn.guid = origFn.guid || ( origFn.guid = jQuery.guid++ );
 	}
+	// 返回 元素集遍历
 	return elem.each( function() {
+		// 调用 jQuery.event.add 方法 这里还没读到
 		jQuery.event.add( this, types, fn, data, selector );
 	} );
 }
 
 /*
  * Helper functions for managing events -- not part of the public interface.
+ * 管理事件的辅助函数——不是公共接口的一部分
  * Props to Dean Edwards' addEvent library for many of the ideas.
+ * 为Dean Edwards的图书馆提供了很多想法。
  */
+// 定义 jQuery.event 对象
 jQuery.event = {
 
+	// global 对象
 	global: {},
 
+	// add 方法
 	add: function( elem, types, handler, data, selector ) {
 
+		// 初始化 handleObjIn, eventHandle, tmp,
+		// 初始化 events, t, handleObj,
+		// 初始化 special, handlers, type, namespaces, origType
+		// 声明 elemData 赋值 dataPriv.get( elem )
 		var handleObjIn, eventHandle, tmp,
 			events, t, handleObj,
 			special, handlers, type, namespaces, origType,
 			elemData = dataPriv.get( elem );
 
 		// Don't attach events to noData or text/comment nodes (but allow plain objects)
+		// 不要将事件附加到 noData 或文本/注释节点（但允许普通对象）
+		// 若 elemData 不存在 直接 返回
 		if ( !elemData ) {
 			return;
 		}
 
 		// Caller can pass in an object of custom data in lieu of the handler
+		// 调用方可以传递自定义数据对象代替处理程序。
+		// 若 handler.handler 存在
 		if ( handler.handler ) {
+			// handleObjIn 赋值 handler
 			handleObjIn = handler;
+			// handler 赋值 handleObjIn.handler
 			handler = handleObjIn.handler;
+			// selector 赋值 handleObjIn.selector
 			selector = handleObjIn.selector;
 		}
 
 		// Ensure that invalid selectors throw exceptions at attach time
+		// 确保无效选择器在附加时间引发异常。
 		// Evaluate against documentElement in case elem is a non-element node (e.g., document)
+		// 在 elem 是非元素节点（例如，文档）的情况下，对文档元素进行评估
+		// 若 selector 存在
 		if ( selector ) {
+			// 执行 jQuery.find.matchesSelector( documentElement, selector )
 			jQuery.find.matchesSelector( documentElement, selector );
 		}
 
 		// Make sure that the handler has a unique ID, used to find/remove it later
+		// 确保处理程序具有唯一的ID，用于以后查找/删除它。
+		// 若 handler.guid 返回为 false 或者 不存在
 		if ( !handler.guid ) {
+			// handler.guid 赋值 jQuery.guid++
 			handler.guid = jQuery.guid++;
 		}
 
 		// Init the element's event structure and main handler, if this is the first
+		// 初始化元素的事件结构和主处理程序，如果这是第一个
+		// events 赋值 elemData.events 后 使用 ! 操作符 返回 true
 		if ( !( events = elemData.events ) ) {
+			// 为 events 和 elemData.events 同时赋值 空对象
 			events = elemData.events = {};
 		}
+		// eventHandle 赋值 elemData.handle 后 使用 ! 操作符 返回 true
 		if ( !( eventHandle = elemData.handle ) ) {
+			// 为 eventHandle 和 elemData.handle 同时赋值 匿名函数
 			eventHandle = elemData.handle = function( e ) {
 
 				// Discard the second event of a jQuery.event.trigger() and
 				// when an event is called after a page has unloaded
+				// 丢弃 jQuery.event.trigger() 的第二个事件，并在页面卸载后调用事件。
+				// 返回 若 jQuery 不为 undefined 并且
+				// 判断 e.type 是否为真 若为真返回 jQuery.event.dispatch.apply( elem, arguments )
+				// 否则返回 undefined
+				// 然后与 jQuery.event.triggered 进行比较
 				return typeof jQuery !== "undefined" && jQuery.event.triggered !== e.type ?
 					jQuery.event.dispatch.apply( elem, arguments ) : undefined;
 			};
 		}
 
 		// Handle multiple events separated by a space
+		// 处理由空间分隔的多个事件
+		// types 赋值 types 不存在或者 '' 的情况 匹配 rnothtmlwhite 正则表达式 返回结果，若没有 则返回 ['']
 		types = ( types || "" ).match( rnothtmlwhite ) || [ "" ];
+		// t 赋值 types 长度
 		t = types.length;
+		// 遍历 t
 		while ( t-- ) {
+			// tmp 赋值 rtypenamespace 正则表达式 执行 types[ t ] 的结果 或返回 []
 			tmp = rtypenamespace.exec( types[ t ] ) || [];
+			// type 和 origType 赋值 tmp[ 1 ]
 			type = origType = tmp[ 1 ];
+			// namespaces 赋值 tmp[ 2 ] 不存在或者 '' 的情况 截取 '.' 返回的数组 然后进行排序
 			namespaces = ( tmp[ 2 ] || "" ).split( "." ).sort();
 
 			// There *must* be a type, no attaching namespace-only handlers
+			// 必须是一种类型，不需要只附加命名空间
+			// 若 type 不存在 则跳过此次循环
 			if ( !type ) {
 				continue;
 			}
 
 			// If event changes its type, use the special event handlers for the changed type
+			// 如果事件更改其类型，则使用已更改类型的特殊事件处理程序。
+			// special 赋值 jQuery.event.special[ type ] 或 空对象
 			special = jQuery.event.special[ type ] || {};
 
 			// If selector defined, determine special event api type, otherwise given type
+			// 如果定义了选择器，则确定特殊事件API类型，否则指定类型
+			// type 赋值 若 selector 存在 返回 special.delegateType 否则返回 special.bindType
 			type = ( selector ? special.delegateType : special.bindType ) || type;
 
 			// Update special based on newly reset type
+			// 基于新复位类型的特殊更新
+			// special 赋值 jQuery.event.special[ type ] 或 空对象
 			special = jQuery.event.special[ type ] || {};
 
 			// handleObj is passed to all event handlers
+			// handleObj 传递给所有事件处理程序
+			// handleObj 赋值 使用 jQuery.extend 方法 将 handleObjIn 合并至 第一参数对象
 			handleObj = jQuery.extend( {
 				type: type,
 				origType: origType,
@@ -184,36 +290,54 @@ jQuery.event = {
 			}, handleObjIn );
 
 			// Init the event handler queue if we're the first
+			// 如果我们是第一个，则初始化事件处理程序队列。
+			// handlers 赋值 events[ type ] 使用 ! 操作符 返回为 true
 			if ( !( handlers = events[ type ] ) ) {
+				// handlers 和 events[ type ] 赋值为 空数组
 				handlers = events[ type ] = [];
+				// handlers.delegateCount = 0
 				handlers.delegateCount = 0;
 
 				// Only use addEventListener if the special events handler returns false
+				// 如果特殊事件处理程序返回false，则只使用 addEventListener 。
+				// 若 !special.setup 返回 true 或者 special.setup.call( elem, data, namespaces, eventHandle ) === false
 				if ( !special.setup ||
 					special.setup.call( elem, data, namespaces, eventHandle ) === false ) {
 
+					// 若 elem.addEventListener 存在
 					if ( elem.addEventListener ) {
+						// 执行 elem.addEventListener( type, eventHandle )
 						elem.addEventListener( type, eventHandle );
 					}
 				}
 			}
 
+			// 若 special.add 存在
 			if ( special.add ) {
+				// 执行 special.add( handleObj )
 				special.add.call( elem, handleObj );
 
+				// 若 !handleObj.handler.guid 返回为 true
 				if ( !handleObj.handler.guid ) {
+					// handleObj.handler.guid = handler.guid
 					handleObj.handler.guid = handler.guid;
 				}
 			}
 
 			// Add to the element's handler list, delegates in front
+			// 添加到元素的处理程序列表中，前面的委托
+			// 若 selector 存在
 			if ( selector ) {
+				// 执行 handlers.splice( handlers.delegateCount++, 0, handleObj )
 				handlers.splice( handlers.delegateCount++, 0, handleObj );
 			} else {
+				// 否则执行 handlers.push( handleObj )
 				handlers.push( handleObj );
 			}
 
 			// Keep track of which events have ever been used, for event optimization
+			// 跟踪哪些事件被使用过，用于事件优化
+			// 标记 jQuery.event.global[ type ] 为 true
 			jQuery.event.global[ type ] = true;
 		}
 
