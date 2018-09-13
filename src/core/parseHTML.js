@@ -9,6 +9,7 @@ define( [
 ], function( jQuery, document, rsingleTag, buildFragment, support ) {
 
 "use strict";
+
 	// require core.js 获得 jQuery
 	// require var/document.js 获得 window.document
 	// require ./var/rsingleTag.js 获得 正则表达式
@@ -25,10 +26,12 @@ define( [
 // keepscripts（可选）：如果设置为true，将包括在HTML中的脚本。
 // 描述: 将字符串解析到一个DOM节点的数组中。
 jQuery.parseHTML = function( data, context, keepScripts ) {
+
 	// 若 data 不是 String 类型 返回 空数组
 	if ( typeof data !== "string" ) {
 		return [];
 	}
+
 	// 若 conetxt 为 布尔类型
 	// 设置 keepScripts = context
 	// context 设置 为 false
@@ -50,6 +53,7 @@ jQuery.parseHTML = function( data, context, keepScripts ) {
 		// 使用 document.implementation
 		// 如果 support.createHTMLDocument 返回 true
 		if ( support.createHTMLDocument ) {
+
 			// 调用 document.implementation.createHTMLDocument
 			context = document.implementation.createHTMLDocument( "" );
 
@@ -66,6 +70,7 @@ jQuery.parseHTML = function( data, context, keepScripts ) {
 			base.href = document.location.href;
 			context.head.appendChild( base );
 		} else {
+
 			// 设置 context = document
 			context = document;
 		}
@@ -73,6 +78,7 @@ jQuery.parseHTML = function( data, context, keepScripts ) {
 
 	// rsingleTag 正则表达式 匹配 data 返回至 parsed
 	parsed = rsingleTag.exec( data );
+
 	// 若 !keepScripts 为 false 则 返回 false，否则返回 []
 	scripts = !keepScripts && [];
 
@@ -80,6 +86,7 @@ jQuery.parseHTML = function( data, context, keepScripts ) {
 	// 单标签
 	// 若 parsed 存在
 	if ( parsed ) {
+
 		// 获取 parsed[ 1 ] 并创建元素
 		// 返回 [ 该创建元素 ]
 		return [ context.createElement( parsed[ 1 ] ) ];
@@ -91,6 +98,7 @@ jQuery.parseHTML = function( data, context, keepScripts ) {
 
 	// 若 scripts 存在并且长度大于 0
 	if ( scripts && scripts.length ) {
+
 		// 将 scripts 移除
 		jQuery( scripts ).remove();
 	}

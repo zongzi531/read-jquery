@@ -14,6 +14,7 @@ define( function() {
 
 		// 判断 !view 或者 !view.opener
 		if ( !view || !view.opener ) {
+
 			// view 赋值 window
 			view = window;
 		}

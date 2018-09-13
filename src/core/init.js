@@ -10,6 +10,7 @@ define( [
 ], function( jQuery, document, isFunction, rsingleTag ) {
 
 "use strict";
+
 	// require core.js 获得 jQuery
 	// require var/document.js 获得 window.document
 	// require var/isFunction.js 获得 isFunction 方法
@@ -31,6 +32,7 @@ var rootjQuery,
 
 	// 声明 init 方法 同时赋值至 jQuery.fn.init
 	init = jQuery.fn.init = function( selector, context, root ) {
+
 		// 初始化 match, elem
 		var match, elem;
 
@@ -49,6 +51,7 @@ var rootjQuery,
 		// Handle HTML strings
 		// 操作 HTML 选择器
 		if ( typeof selector === "string" ) {
+
 			// 若 selector 为 <?+> 进入判断
 			if ( selector[ 0 ] === "<" &&
 				selector[ selector.length - 1 ] === ">" &&
@@ -59,6 +62,7 @@ var rootjQuery,
 				match = [ null, selector, null ];
 
 			} else {
+
 				// 否则进入正则表达式检查
 				match = rquickExpr.exec( selector );
 			}
@@ -72,6 +76,7 @@ var rootjQuery,
 				// HANDLE: $(html) -> $(array)
 				// match[ 1 ] 存在
 				if ( match[ 1 ] ) {
+
 					// 对 上下文进行检查，使用 instanceof 运算符检查 上下文 context 是否为 jQuery 的实例
 					// 若 为真 则取 上下文 [0] 否则返回 上下文 则为不进行操作
 					// 为什么要这么做呢？ 暂时对上下文还是没有很好的理解
@@ -93,6 +98,7 @@ var rootjQuery,
 					// OK 没看懂这里是要做什么
 					// 使用 rsingleTag 校验 match[ 1 ] 并且 上下文 需要是纯粹的对象
 					if ( rsingleTag.test( match[ 1 ] ) && jQuery.isPlainObject( context ) ) {
+
 						// 使用 in 操作符 遍历上下文
 						for ( match in context ) {
 
@@ -100,12 +106,14 @@ var rootjQuery,
 							// 如果可能的话，上下文的属性被称为方法。
 							// 检测当前 match 在 this 上是否为 function
 							if ( isFunction( this[ match ] ) ) {
+
 								// 执行 this[ match ] 传入参数 context[ match ] 值
 								this[ match ]( context[ match ] );
 
 							// ...and otherwise set as attributes
 							// 否则设置属性
 							} else {
+
 								// 执行 attr 方法，传入 对应的 match 键值
 								// attr 方法 我暂时还没读到
 								this.attr( match, context[ match ] );
@@ -119,6 +127,7 @@ var rootjQuery,
 				// HANDLE: $(#id)
 				// 操作 #id 选择器
 				} else {
+
 					// 这里取的是 2 号位置
 					// 那么 match 是 rquickExpr 返回的结果
 					// 使用原生方法获取当前元素
@@ -134,6 +143,7 @@ var rootjQuery,
 						this[ 0 ] = elem;
 						this.length = 1;
 					}
+
 					// 返回 this
 					return this;
 				}
@@ -142,6 +152,7 @@ var rootjQuery,
 			// 操作 正则? 没看懂
 			// 若 上下文不存在 或者 context 有 jquery 属性
 			} else if ( !context || context.jquery ) {
+
 				// 返回 上下文 或者 根 jQuery 去执行 find 查找 选择器
 				return ( context || root ).find( selector );
 
@@ -149,6 +160,7 @@ var rootjQuery,
 			// (which is just equivalent to: $(context).find(expr)
 			// 这相当于 $(context).find(expr)
 			} else {
+
 				// this.constructor 就是 jQuery 也就是 $
 				return this.constructor( context ).find( selector );
 			}
@@ -156,6 +168,7 @@ var rootjQuery,
 		// HANDLE: $(DOMElement)
 		// 操作 DOMElement
 		} else if ( selector.nodeType ) {
+
 			// 直接将元素直接注入jQuery对象
 			this[ 0 ] = selector;
 			this.length = 1;
@@ -166,6 +179,7 @@ var rootjQuery,
 		// 操作 function
 		// document准备好的快捷方式
 		} else if ( isFunction( selector ) ) {
+
 			// 返回 若 root.ready 存在，则 root.ready( selector )
 			return root.ready !== undefined ?
 				root.ready( selector ) :

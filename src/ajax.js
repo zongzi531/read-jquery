@@ -15,6 +15,7 @@ define( [
 ], function( jQuery, document, isFunction, rnothtmlwhite, location, nonce, rquery ) {
 
 "use strict";
+
 	// require core.js 获得 jQuery
 	// require var/document.js 获得 window.document
 	// require var/isFunction.js 获得 isFunction 方法
@@ -29,20 +30,26 @@ define( [
 	// require serialize.js
 
 var
+
 	// 声明 r20 正则表达式
 	r20 = /%20/g,
+
 	// 声明 rhash 正则表达式
 	rhash = /#.*$/,
+
 	// 声明 rantiCache 正则表达式
 	rantiCache = /([?&])_=[^&]*/,
+
 	// 声明 rheaders 正则表达式
 	rheaders = /^(.*?):[ \t]*([^\r\n]*)$/mg,
 
 	// #7653, #8125, #8152: local protocol detection
 	// 声明 rlocalProtocol 正则表达式
 	rlocalProtocol = /^(?:about|app|app-storage|.+-extension|file|res|widget):$/,
+
 	// 声明 rnoContent 正则表达式
 	rnoContent = /^(?:GET|HEAD)$/,
+
 	// 声明 rprotocol 正则表达式
 	rprotocol = /^\/\//,
 
@@ -87,6 +94,7 @@ var
 	// 用于解析文档源的锚标签
 	// 声明 originAnchor 赋值 document.createElement( "a" )
 	originAnchor = document.createElement( "a" );
+
 	// 声明 originAnchor.href 赋值 location.href
 	originAnchor.href = location.href;
 
@@ -102,16 +110,20 @@ function addToPrefiltersOrTransports( structure ) {
 
 		// 判断 dataTypeExpression 是否为 "string" 类型
 		if ( typeof dataTypeExpression !== "string" ) {
+
 			// func 赋值 dataTypeExpression
 			func = dataTypeExpression;
+
 			// dataTypeExpression 赋值 "*"
 			dataTypeExpression = "*";
 		}
 
 		// 初始化 dataType
 		var dataType,
+
 			// 声明 i 赋值 0
 			i = 0,
+
 			// 声明 dataTypes 赋值 dataTypeExpression.toLowerCase().match( rnothtmlwhite ) 或者 []
 			dataTypes = dataTypeExpression.toLowerCase().match( rnothtmlwhite ) || [];
 
@@ -127,14 +139,17 @@ function addToPrefiltersOrTransports( structure ) {
 				// 如果需要，准备好
 				// 判断 dataType[ 0 ] === "+"
 				if ( dataType[ 0 ] === "+" ) {
+
 					// dataType 赋值 dataType.slice( 1 ) 或者 "*"
 					dataType = dataType.slice( 1 ) || "*";
+
 					// ( structure[ dataType ] 赋值 structure[ dataType ] 或者 [] ).unshift( func )
 					( structure[ dataType ] = structure[ dataType ] || [] ).unshift( func );
 
 				// Otherwise append
 				// 否则追加
 				} else {
+
 					// ( structure[ dataType ] 赋值 structure[ dataType ] 或者 [] ).push( func )
 					( structure[ dataType ] = structure[ dataType ] || [] ).push( func );
 				}
@@ -150,36 +165,47 @@ function inspectPrefiltersOrTransports( structure, options, originalOptions, jqX
 
 	// 声明 inspected 赋值 空对象
 	var inspected = {},
+
 		// 声明 seekingTransport 赋值 ( structure === transports )
 		// 这儿为啥要加个括号呢？
 		seekingTransport = ( structure === transports );
 
 	// 声明 inspect 方法
 	function inspect( dataType ) {
+
 		// 初始化 selected
 		var selected;
+
 		// inspected[ dataType ] 赋值 true
 		inspected[ dataType ] = true;
+
 		// 使用 jQuery.each 方法遍历 structure[ dataType ] 或者 []
 		jQuery.each( structure[ dataType ] || [], function( _, prefilterOrFactory ) {
+
 			// 声明 dataTypeOrTransport 赋值 prefilterOrFactory( options, originalOptions, jqXHR )
 			var dataTypeOrTransport = prefilterOrFactory( options, originalOptions, jqXHR );
+
 			// 判断 dataTypeOrTransport 为 "string" 类型 并且 !seekingTransport 并且 !inspected[ dataTypeOrTransport ]
 			if ( typeof dataTypeOrTransport === "string" &&
 				!seekingTransport && !inspected[ dataTypeOrTransport ] ) {
 
 				// options.dataTypes.unshift( dataTypeOrTransport )
 				options.dataTypes.unshift( dataTypeOrTransport );
+
 				// 执行 inspect( dataTypeOrTransport )
 				inspect( dataTypeOrTransport );
+
 				// 返回 false
 				return false;
+
 				// 判断 seekingTransport
 			} else if ( seekingTransport ) {
+
 				// 返回 !( selected 赋值 dataTypeOrTransport )
 				return !( selected = dataTypeOrTransport );
 			}
 		} );
+
 		// 返回 selected
 		return selected;
 	}
@@ -194,21 +220,27 @@ function inspectPrefiltersOrTransports( structure, options, originalOptions, jqX
 // Fixes #9887
 // 声明 ajaxExtend 方法
 function ajaxExtend( target, src ) {
+
 	// 初始化 key, deep
 	var key, deep,
+
 		// 声明 flatOptions 赋值 jQuery.ajaxSettings.flatOptions 或者 {}
 		flatOptions = jQuery.ajaxSettings.flatOptions || {};
 
 	// 遍历 src
 	for ( key in src ) {
+
 		// 判断 src[ key ] !== undefined
 		if ( src[ key ] !== undefined ) {
+
 			// ( flatOptions[ key ] ? target : ( deep || ( deep = {} ) ) )[ key ] = src[ key ]
 			( flatOptions[ key ] ? target : ( deep || ( deep = {} ) ) )[ key ] = src[ key ];
 		}
 	}
+
 	// 判断 deep
 	if ( deep ) {
+
 		// jQuery.extend( true, target, deep )
 		jQuery.extend( true, target, deep );
 	}
@@ -229,8 +261,10 @@ function ajaxHandleResponses( s, jqXHR, responses ) {
 
 	// 初始化 ct, type, finalDataType, firstDataType
 	var ct, type, finalDataType, firstDataType,
+
 		// contents 赋值 s.contents
 		contents = s.contents,
+
 		// dataTypes 赋值 s.dataTypes
 		dataTypes = s.dataTypes;
 
@@ -238,10 +272,13 @@ function ajaxHandleResponses( s, jqXHR, responses ) {
 	// 删除 auto dataType 并在过程中获取内容类型
 	// 遍历 dataTypes[ 0 ] === "*"
 	while ( dataTypes[ 0 ] === "*" ) {
+
 		// dataTypes.shift()
 		dataTypes.shift();
+
 		// 判断 ct === undefined
 		if ( ct === undefined ) {
+
 			// ct 赋值 s.mimeType 或者 jqXHR.getResponseHeader( "Content-Type" )
 			ct = s.mimeType || jqXHR.getResponseHeader( "Content-Type" );
 		}
@@ -251,12 +288,16 @@ function ajaxHandleResponses( s, jqXHR, responses ) {
 	// 检查我们是否处理了一个已知的内容类型
 	// 判断 ct
 	if ( ct ) {
+
 		// 遍历 contents
 		for ( type in contents ) {
+
 			// 判断 contents[ type ] 并且 contents[ type ].test( ct )
 			if ( contents[ type ] && contents[ type ].test( ct ) ) {
+
 				// dataTypes.unshift( type )
 				dataTypes.unshift( type );
+
 				// 退出当前循环 contents
 				break;
 			}
@@ -267,8 +308,10 @@ function ajaxHandleResponses( s, jqXHR, responses ) {
 	// 检查是否有期望的数据类型的响应
 	// 判断 dataTypes[ 0 ] in responses
 	if ( dataTypes[ 0 ] in responses ) {
+
 		// finalDataType 赋值 dataTypes[ 0 ]
 		finalDataType = dataTypes[ 0 ];
+
 		// 否则
 	} else {
 
@@ -276,15 +319,20 @@ function ajaxHandleResponses( s, jqXHR, responses ) {
 		// 尝试可转换数据类型
 		// 遍历 responses
 		for ( type in responses ) {
+
 			// 判断 !dataTypes[ 0 ] 或者 s.converters[ type + " " + dataTypes[ 0 ] ]
 			if ( !dataTypes[ 0 ] || s.converters[ type + " " + dataTypes[ 0 ] ] ) {
+
 				// finalDataType 赋值 type
 				finalDataType = type;
+
 				// 退出当前循环 responses
 				break;
 			}
+
 			// 判断 !firstDataType
 			if ( !firstDataType ) {
+
 				// firstDataType 赋值 type
 				firstDataType = type;
 			}
@@ -303,11 +351,14 @@ function ajaxHandleResponses( s, jqXHR, responses ) {
 	// 如果需要，我们将数据类型添加到列表中，并返回相应的响应。
 	// 判断 finalDataType
 	if ( finalDataType ) {
+
 		// 判断 finalDataType !== dataTypes[ 0 ]
 		if ( finalDataType !== dataTypes[ 0 ] ) {
+
 			// dataTypes.unshift( finalDataType )
 			dataTypes.unshift( finalDataType );
 		}
+
 		// 返回 responses[ finalDataType ]
 		return responses[ finalDataType ];
 	}
@@ -320,8 +371,10 @@ function ajaxHandleResponses( s, jqXHR, responses ) {
  */
 // 声明 ajaxConvert 方法
 function ajaxConvert( s, response, jqXHR, isSuccess ) {
+
 	// 初始化 conv2, current, conv, tmp, prev
 	var conv2, current, conv, tmp, prev,
+
 		// 声明 converters 赋值 空对象
 		converters = {},
 
@@ -334,8 +387,10 @@ function ajaxConvert( s, response, jqXHR, isSuccess ) {
 	// 用低级键创建转换器映射
 	// 判断 dataTypes[ 1 ]
 	if ( dataTypes[ 1 ] ) {
+
 		// 遍历 s.converters
 		for ( conv in s.converters ) {
+
 			// converters[ conv.toLowerCase() ] 赋值 s.converters[ conv ]
 			converters[ conv.toLowerCase() ] = s.converters[ conv ];
 		}
@@ -351,6 +406,7 @@ function ajaxConvert( s, response, jqXHR, isSuccess ) {
 
 		// 判断 s.responseFields[ current ]
 		if ( s.responseFields[ current ] ) {
+
 			// jqXHR[ s.responseFields[ current ] ] 赋值 response
 			jqXHR[ s.responseFields[ current ] ] = response;
 		}
@@ -359,12 +415,14 @@ function ajaxConvert( s, response, jqXHR, isSuccess ) {
 		// 如果提供数据应用程序
 		// 判断 !prev 并且 isSuccess 并且 s.dataFilter
 		if ( !prev && isSuccess && s.dataFilter ) {
+
 			// response 赋值 s.dataFilter( response, s.dataType )
 			response = s.dataFilter( response, s.dataType );
 		}
 
 		// prev 赋值 current
 		prev = current;
+
 		// current 赋值 dataTypes.shift()
 		current = dataTypes.shift();
 
@@ -393,6 +451,7 @@ function ajaxConvert( s, response, jqXHR, isSuccess ) {
 				// 如果没有找到，寻找一对
 				// 判断 !conv
 				if ( !conv ) {
+
 					// 遍历 converters
 					for ( conv2 in converters ) {
 
@@ -400,6 +459,7 @@ function ajaxConvert( s, response, jqXHR, isSuccess ) {
 						// 如果 conv2 输出电流
 						// tmp 赋值 conv2.split( " " )
 						tmp = conv2.split( " " );
+
 						// 判断 tmp[ 1 ] === current
 						if ( tmp[ 1 ] === current ) {
 
@@ -408,6 +468,7 @@ function ajaxConvert( s, response, jqXHR, isSuccess ) {
 							// conv 赋值 converters[ prev + " " + tmp[ 0 ] ] 或者 converters[ "* " + tmp[ 0 ] ]
 							conv = converters[ prev + " " + tmp[ 0 ] ] ||
 								converters[ "* " + tmp[ 0 ] ];
+
 							// 判断 conv
 							if ( conv ) {
 
@@ -415,6 +476,7 @@ function ajaxConvert( s, response, jqXHR, isSuccess ) {
 								// 冷凝等效变换器
 								// 判断 conv === true
 								if ( conv === true ) {
+
 									// conv 赋值 converters[ conv2 ]
 									conv = converters[ conv2 ];
 
@@ -422,11 +484,14 @@ function ajaxConvert( s, response, jqXHR, isSuccess ) {
 								// 否则，插入中间数据类型
 								// 判断 converters[ conv2 ] !== true
 								} else if ( converters[ conv2 ] !== true ) {
+
 									// current 赋值 tmp[ 0 ]
 									current = tmp[ 0 ];
+
 									// dataTypes.unshift( tmp[ 1 ] )
 									dataTypes.unshift( tmp[ 1 ] );
 								}
+
 								// 退出当前循环 converters
 								break;
 							}
@@ -444,13 +509,16 @@ function ajaxConvert( s, response, jqXHR, isSuccess ) {
 					// 判断 conv && s.throws
 					// 可以看出 这一步很关键
 					if ( conv && s.throws ) {
+
 						// response 赋值 conv( response )
 						response = conv( response );
 					} else {
 						try {
+
 							// 尝试 response 赋值 conv( response )
 							response = conv( response );
 						} catch ( e ) {
+
 							// 若报错 返回 对象
 							return {
 								state: "parsererror",
@@ -566,6 +634,7 @@ jQuery.extend( {
 	// 如果目标被省略，则写入 ajaxSettings .
 	// ajaxSetup 方法
 	ajaxSetup: function( target, settings ) {
+
 		// 返回 settings 返回为真 则返回 ajaxExtend( ajaxExtend( target, jQuery.ajaxSettings ), settings )
 		// 否则 返回 ajaxExtend( jQuery.ajaxSettings, target )
 		return settings ?
@@ -581,6 +650,7 @@ jQuery.extend( {
 
 	// ajaxPrefilter 为 addToPrefiltersOrTransports( prefilters ) 执行结果
 	ajaxPrefilter: addToPrefiltersOrTransports( prefilters ),
+
 	// ajaxTransport 为 addToPrefiltersOrTransports( transports ) 执行结果
 	ajaxTransport: addToPrefiltersOrTransports( transports ),
 
@@ -593,8 +663,10 @@ jQuery.extend( {
 		// 如果 url 是对象，则模拟 前-1.5 签名
 		// 判断 url 是否为 "object" 类型
 		if ( typeof url === "object" ) {
+
 			// options 赋值 url
 			options = url;
+
 			// url 赋值 undefined
 			url = undefined;
 		}
@@ -616,6 +688,7 @@ jQuery.extend( {
 			// 响应头
 			// 初始化 responseHeadersString
 			responseHeadersString,
+
 			// 初始化 responseHeaders
 			responseHeaders,
 
@@ -671,6 +744,7 @@ jQuery.extend( {
 			// 延迟
 			// 声明 deferred 赋值 jQuery.Deferred()
 			deferred = jQuery.Deferred(),
+
 			// 声明 completeDeferred 赋值 jQuery.Callbacks( "once memory" )
 			completeDeferred = jQuery.Callbacks( "once memory" ),
 
@@ -683,6 +757,7 @@ jQuery.extend( {
 			// 报头（它们一次发送）
 			// 声明 requestHeaders 赋值 空对象
 			requestHeaders = {},
+
 			// 声明 requestHeadersNames 赋值 空对象
 			requestHeadersNames = {},
 
@@ -701,23 +776,31 @@ jQuery.extend( {
 				// 如果需要的话，建立标题哈希表
 				// getResponseHeader 方法
 				getResponseHeader: function( key ) {
+
 					// 初始化 match
 					var match;
+
 					// 判断 completed
 					if ( completed ) {
+
 						// 判断 !responseHeaders
 						if ( !responseHeaders ) {
+
 							// responseHeaders 赋值 {}
 							responseHeaders = {};
+
 							// 遍历 ( match 赋值 rheaders.exec( responseHeadersString ) )
 							while ( ( match = rheaders.exec( responseHeadersString ) ) ) {
+
 								// responseHeaders[ match[ 1 ].toLowerCase() ] 赋值 match[ 2 ]
 								responseHeaders[ match[ 1 ].toLowerCase() ] = match[ 2 ];
 							}
 						}
+
 						// match 赋值 responseHeaders[ key.toLowerCase() ]
 						match = responseHeaders[ key.toLowerCase() ];
 					}
+
 					// 返回 match == null ? null : match
 					return match == null ? null : match;
 				},
@@ -726,6 +809,7 @@ jQuery.extend( {
 				// 原始字符串
 				// getAllResponseHeaders 方法
 				getAllResponseHeaders: function() {
+
 					// 返回 completed ? responseHeadersString : null
 					return completed ? responseHeadersString : null;
 				},
@@ -734,14 +818,18 @@ jQuery.extend( {
 				// 缓存报头
 				// setRequestHeader 方法
 				setRequestHeader: function( name, value ) {
+
 					// 判断 completed == null
 					if ( completed == null ) {
+
 						// name 和 requestHeadersNames[ name.toLowerCase() ] 赋值 requestHeadersNames[ name.toLowerCase() ] 或者 name
 						name = requestHeadersNames[ name.toLowerCase() ] =
 							requestHeadersNames[ name.toLowerCase() ] || name;
+
 						// requestHeaders[ name ] 赋值 value
 						requestHeaders[ name ] = value;
 					}
+
 					// 返回 this
 					return this;
 				},
@@ -750,11 +838,14 @@ jQuery.extend( {
 				// 重写响应内容类型头
 				// overrideMimeType 方法
 				overrideMimeType: function( type ) {
+
 					// 判断 completed == null
 					if ( completed == null ) {
+
 						// s.mimeType 赋值 type
 						s.mimeType = type;
 					}
+
 					// 返回 this
 					return this;
 				},
@@ -763,10 +854,13 @@ jQuery.extend( {
 				// 状态相关回调
 				// statusCode 方法
 				statusCode: function( map ) {
+
 					// 初始化 code
 					var code;
+
 					// 判断 map
 					if ( map ) {
+
 						// 判断 completed
 						if ( completed ) {
 
@@ -780,11 +874,13 @@ jQuery.extend( {
 							// 以一种保存旧回调的方式懒惰地添加新的回调
 							// 遍历 map
 							for ( code in map ) {
+
 								// statusCode[ code ] 赋值 [ statusCode[ code ], map[ code ] ]
 								statusCode[ code ] = [ statusCode[ code ], map[ code ] ];
 							}
 						}
 					}
+
 					// 返回 this
 					return this;
 				},
@@ -793,15 +889,20 @@ jQuery.extend( {
 				// 取消请求
 				// abort 方法
 				abort: function( statusText ) {
+
 					// 声明 finalText 赋值 statusText 或者 strAbort
 					var finalText = statusText || strAbort;
+
 					// 判断 transport
 					if ( transport ) {
+
 						// 执行 transport.abort( finalText )
 						transport.abort( finalText );
 					}
+
 					// 执行 done( 0, finalText )
 					done( 0, finalText );
+
 					// 返回 this
 					return this;
 				}
@@ -836,6 +937,7 @@ jQuery.extend( {
 		// 当源与当前源不匹配时，需要跨域请求。
 		// 判断 s.crossDomain == null
 		if ( s.crossDomain == null ) {
+
 			// urlAnchor 赋值 document.createElement( "a" )
 			urlAnchor = document.createElement( "a" );
 
@@ -845,6 +947,7 @@ jQuery.extend( {
 			// e.g. http://example.com:80x/
 			// 尝试执行
 			try {
+
 				// urlAnchor.href 赋值 s.url
 				urlAnchor.href = s.url;
 
@@ -853,6 +956,7 @@ jQuery.extend( {
 				// 当 s.url 是相对的时，锚的主机属性没有正确设置
 				// urlAnchor.href 赋值 urlAnchor.href
 				urlAnchor.href = urlAnchor.href;
+
 				// s.crossDomain 赋值 originAnchor.protocol + "//" + originAnchor.host !== urlAnchor.protocol + "//" + urlAnchor.host
 				s.crossDomain = originAnchor.protocol + "//" + originAnchor.host !==
 					urlAnchor.protocol + "//" + urlAnchor.host;
@@ -870,6 +974,7 @@ jQuery.extend( {
 		// 如果不是字符串，则转换数据
 		// 判断 s.data && s.processData 并且 typeof s.data !== "string"
 		if ( s.data && s.processData && typeof s.data !== "string" ) {
+
 			// s.data 赋值 jQuery.param( s.data, s.traditional )
 			s.data = jQuery.param( s.data, s.traditional );
 		}
@@ -883,6 +988,7 @@ jQuery.extend( {
 		// 如果请求在预过滤器内部中止，请停止
 		// 判断 completed
 		if ( completed ) {
+
 			// 返回 jqXHR
 			return jqXHR;
 		}
@@ -898,6 +1004,7 @@ jQuery.extend( {
 		// 注意一组新的请求
 		// 判断 fireGlobals 并且 jQuery.active++ === 0
 		if ( fireGlobals && jQuery.active++ === 0 ) {
+
 			// 执行 jQuery.event.trigger( "ajaxStart" )
 			jQuery.event.trigger( "ajaxStart" );
 		}
@@ -934,6 +1041,7 @@ jQuery.extend( {
 			// 如果数据可用并且应该被处理，将数据附加到URL
 			// 判断 s.data 并且 ( s.processData 或者 typeof s.data === "string" )
 			if ( s.data && ( s.processData || typeof s.data === "string" ) ) {
+
 				// cacheURL 赋值 cacheURL + ( rquery.test( cacheURL ) ? "&" : "?" ) + s.data
 				cacheURL += ( rquery.test( cacheURL ) ? "&" : "?" ) + s.data;
 
@@ -947,8 +1055,10 @@ jQuery.extend( {
 			// 如果需要，添加或更新反缓存参数
 			// 判断 s.cache === fals
 			if ( s.cache === false ) {
+
 				// cacheURL 赋值 cacheURL.replace( rantiCache, "$1" )
 				cacheURL = cacheURL.replace( rantiCache, "$1" );
+
 				// uncached 赋值 ( rquery.test( cacheURL ) ? "&" : "?" ) + "_=" + ( nonce++ ) + uncached
 				uncached = ( rquery.test( cacheURL ) ? "&" : "?" ) + "_=" + ( nonce++ ) + uncached;
 			}
@@ -963,6 +1073,7 @@ jQuery.extend( {
 		// 判断 s.data 并且 s.processData 并且 ( s.contentType || "" ).indexOf( "application/x-www-form-urlencoded" ) === 0
 		} else if ( s.data && s.processData &&
 			( s.contentType || "" ).indexOf( "application/x-www-form-urlencoded" ) === 0 ) {
+
 			// s.data 赋值 s.data.replace( r20, "+" )
 			s.data = s.data.replace( r20, "+" );
 		}
@@ -971,13 +1082,17 @@ jQuery.extend( {
 		// 如果在 ifModified 模式下设置 If-Modified-Since 和/或 If-None-Match 标题。
 		// 判断 s.ifModified
 		if ( s.ifModified ) {
+
 			// 判断 jQuery.lastModified[ cacheURL ]
 			if ( jQuery.lastModified[ cacheURL ] ) {
+
 				// 执行 jqXHR.setRequestHeader( "If-Modified-Since", jQuery.lastModified[ cacheURL ] )
 				jqXHR.setRequestHeader( "If-Modified-Since", jQuery.lastModified[ cacheURL ] );
 			}
+
 			// 判断 jQuery.etag[ cacheURL ]
 			if ( jQuery.etag[ cacheURL ] ) {
+
 				// 执行 jqXHR.setRequestHeader( "If-None-Match", jQuery.etag[ cacheURL ] )
 				jqXHR.setRequestHeader( "If-None-Match", jQuery.etag[ cacheURL ] );
 			}
@@ -987,6 +1102,7 @@ jQuery.extend( {
 		// 如果发送数据，则设置正确的页眉
 		// 判断 s.data 并且 s.hasContent 并且 s.contentType !== false 或者 options.contentType
 		if ( s.data && s.hasContent && s.contentType !== false || options.contentType ) {
+
 			// 执行 jqXHR.setRequestHeader( "Content-Type", s.contentType )
 			jqXHR.setRequestHeader( "Content-Type", s.contentType );
 		}
@@ -1006,13 +1122,14 @@ jQuery.extend( {
 		// 检查页眉选项
 		// 遍历 s.headers
 		for ( i in s.headers ) {
+
 			// 执行 jqXHR.setRequestHeader( i, s.headers[ i ] )
 			jqXHR.setRequestHeader( i, s.headers[ i ] );
 		}
 
 		// Allow custom headers/mimetypes and early abort
 		// 允许自定义 headers/mimetypes 和早期中止
-		// 判断 s.beforeSend 并且 ( s.beforeSend.call( callbackContext, jqXHR, s ) === false 或者 completed ) 
+		// 判断 s.beforeSend 并且 ( s.beforeSend.call( callbackContext, jqXHR, s ) === false 或者 completed )
 		if ( s.beforeSend &&
 			( s.beforeSend.call( callbackContext, jqXHR, s ) === false || completed ) ) {
 
@@ -1031,8 +1148,10 @@ jQuery.extend( {
 		// 在延迟上安装回调
 		// 执行 completeDeferred.add( s.complete )
 		completeDeferred.add( s.complete );
+
 		// 执行 jqXHR.done( s.success )
 		jqXHR.done( s.success );
+
 		// 执行 jqXHR.fail( s.error )
 		jqXHR.fail( s.error );
 
@@ -1045,9 +1164,11 @@ jQuery.extend( {
 		// 如果没有传输，我们自动中止
 		// 判断 !transport
 		if ( !transport ) {
+
 			// 执行 done( -1, "No Transport" )
 			done( -1, "No Transport" );
 		} else {
+
 			// jqXHR.readyState 赋值 1
 			jqXHR.readyState = 1;
 
@@ -1055,6 +1176,7 @@ jQuery.extend( {
 			// 发送全局事件
 			// 判断 fireGlobals
 			if ( fireGlobals ) {
+
 				// 执行 globalEventContext.trigger( "ajaxSend", [ jqXHR, s ] )
 				globalEventContext.trigger( "ajaxSend", [ jqXHR, s ] );
 			}
@@ -1063,6 +1185,7 @@ jQuery.extend( {
 			// 如果请求在 ajaxSend 内中止，请停止
 			// 判断 completed
 			if ( completed ) {
+
 				// 返回 jqXHR
 				return jqXHR;
 			}
@@ -1071,9 +1194,11 @@ jQuery.extend( {
 			// 超时
 			// 判断 s.async 并且 s.timeout > 0
 			if ( s.async && s.timeout > 0 ) {
+
 				// timeoutTimer 赋值 window.setTimeout 方法
 				// 传入 匿名函数 以及 s.timeout
 				timeoutTimer = window.setTimeout( function() {
+
 					// 执行 jqXHR.abort( "timeout" )
 					jqXHR.abort( "timeout" );
 				}, s.timeout );
@@ -1081,8 +1206,10 @@ jQuery.extend( {
 
 			// 尝试执行
 			try {
+
 				// completed 赋值 false
 				completed = false;
+
 				// 执行 transport.send( requestHeaders, done )
 				transport.send( requestHeaders, done );
 			} catch ( e ) {
@@ -1091,6 +1218,7 @@ jQuery.extend( {
 				// 重排后完成异常
 				// 判断 completed
 				if ( completed ) {
+
 					// 抛出异常 e
 					throw e;
 				}
@@ -1106,8 +1234,10 @@ jQuery.extend( {
 		// 当一切都完成时的回调
 		// 声明 done 方法
 		function done( status, nativeStatusText, responses, headers ) {
+
 			// 初始化 isSuccess, success, error, response, modified
 			var isSuccess, success, error, response, modified,
+
 				// 声明 statusText 赋值 nativeStatusText
 				statusText = nativeStatusText;
 
@@ -1115,6 +1245,7 @@ jQuery.extend( {
 			// 忽略重复调用
 			// 判断 completed
 			if ( completed ) {
+
 				// 返回
 				return;
 			}
@@ -1126,6 +1257,7 @@ jQuery.extend( {
 			// 如果它存在，清澈的超时
 			// 判断 timeoutTimer
 			if ( timeoutTimer ) {
+
 				// 执行 window.clearTimeout( timeoutTimer )
 				window.clearTimeout( timeoutTimer );
 			}
@@ -1155,6 +1287,7 @@ jQuery.extend( {
 			// 获取响应数据
 			// 判断 responses
 			if ( responses ) {
+
 				// response 赋值 ajaxHandleResponses( s, jqXHR, responses )
 				response = ajaxHandleResponses( s, jqXHR, responses );
 			}
@@ -1173,17 +1306,23 @@ jQuery.extend( {
 				// 设置 If-Modified-Since 和/或 If-None-Match 头，如果在 ifModified 模式。
 				// 判断 s.ifModified
 				if ( s.ifModified ) {
+
 					// modified 赋值 jqXHR.getResponseHeader( "Last-Modified" )
 					modified = jqXHR.getResponseHeader( "Last-Modified" );
+
 					// 判断 modified
 					if ( modified ) {
+
 						// jQuery.lastModified[ cacheURL ] 赋值 modified
 						jQuery.lastModified[ cacheURL ] = modified;
 					}
+
 					// modified 赋值 jqXHR.getResponseHeader( "etag" )
 					modified = jqXHR.getResponseHeader( "etag" );
+
 					// 判断 modified
 					if ( modified ) {
+
 						// jQuery.etag[ cacheURL ] 赋值 modified
 						jQuery.etag[ cacheURL ] = modified;
 					}
@@ -1193,6 +1332,7 @@ jQuery.extend( {
 				// 如果没有内容
 				// 判断 status === 204 或者 s.type === "HEAD"
 				if ( status === 204 || s.type === "HEAD" ) {
+
 					// statusText 赋值 "nocontent"
 					statusText = "nocontent";
 
@@ -1200,18 +1340,23 @@ jQuery.extend( {
 				// 如果没有修改
 				// 判断 status === 304
 				} else if ( status === 304 ) {
+
 					// statusText 赋值 "notmodified"
 					statusText = "notmodified";
 
 				// If we have data, let's convert it
 				// 如果我们有数据，让我们转换它
 				} else {
+
 					// statusText 赋值 response.state
 					statusText = response.state;
+
 					// success 赋值 response.data
 					success = response.data;
+
 					// error 赋值 response.error
 					error = response.error;
+
 					// isSuccess 赋值 !error
 					isSuccess = !error;
 				}
@@ -1221,12 +1366,16 @@ jQuery.extend( {
 				// 从 statusText 中提取错误并对非中止进行规范化
 				// error 赋值 statusText
 				error = statusText;
+
 				// 判断 status 或者 !statusText
 				if ( status || !statusText ) {
+
 					// statusText 赋值 "error"
 					statusText = "error";
+
 					// 判断 status < 0
 					if ( status < 0 ) {
+
 						// status 赋值 0
 						status = 0;
 					}
@@ -1237,6 +1386,7 @@ jQuery.extend( {
 			// 设置假 xhr 对象的数据
 			// jqXHR.status 赋值 status
 			jqXHR.status = status;
+
 			// jqXHR.statusText 赋值 ( nativeStatusText 或者 statusText ) + ""
 			jqXHR.statusText = ( nativeStatusText || statusText ) + "";
 
@@ -1244,9 +1394,11 @@ jQuery.extend( {
 			// 成功/错误
 			// 判断 isSuccess
 			if ( isSuccess ) {
+
 				// 执行 deferred.resolveWith( callbackContext, [ success, statusText, jqXHR ] )
 				deferred.resolveWith( callbackContext, [ success, statusText, jqXHR ] );
 			} else {
+
 				// 执行 deferred.rejectWith( callbackContext, [ jqXHR, statusText, error ] )
 				deferred.rejectWith( callbackContext, [ jqXHR, statusText, error ] );
 			}
@@ -1255,11 +1407,13 @@ jQuery.extend( {
 			// 状态相关回调
 			// 执行 jqXHR.statusCode( statusCode )
 			jqXHR.statusCode( statusCode );
+
 			// statusCode 赋值 undefined
 			statusCode = undefined;
 
 			// 判断 fireGlobals
 			if ( fireGlobals ) {
+
 				// 执行 globalEventContext.trigger 方法
 				globalEventContext.trigger( isSuccess ? "ajaxSuccess" : "ajaxError",
 					[ jqXHR, s, isSuccess ? success : error ] );
@@ -1272,6 +1426,7 @@ jQuery.extend( {
 
 			// 判断 fireGlobals
 			if ( fireGlobals ) {
+
 				// 执行 globalEventContext.trigger( "ajaxComplete", [ jqXHR, s ] )
 				globalEventContext.trigger( "ajaxComplete", [ jqXHR, s ] );
 
@@ -1279,6 +1434,7 @@ jQuery.extend( {
 				// 处理全局Ajax计数器
 				// 判断 !( --jQuery.active )
 				if ( !( --jQuery.active ) ) {
+
 					// 执行 jQuery.event.trigger( "ajaxStop" )
 					jQuery.event.trigger( "ajaxStop" );
 				}
@@ -1291,12 +1447,14 @@ jQuery.extend( {
 
 	// getJSON 方法
 	getJSON: function( url, data, callback ) {
+
 		// 返回 jQuery.get( url, data, callback, "json" )
 		return jQuery.get( url, data, callback, "json" );
 	},
 
 	// getScript 方法
 	getScript: function( url, callback ) {
+
 		// 返回 jQuery.get( url, undefined, callback, "script" )
 		return jQuery.get( url, undefined, callback, "script" );
 	}
@@ -1304,6 +1462,7 @@ jQuery.extend( {
 
 // 使用 jQuery.each 方法 遍历 [ "get", "post" ]
 jQuery.each( [ "get", "post" ], function( i, method ) {
+
 	// jQuery[ method ] 赋值 匿名函数
 	jQuery[ method ] = function( url, data, callback, type ) {
 
@@ -1311,10 +1470,13 @@ jQuery.each( [ "get", "post" ], function( i, method ) {
 		// 如果省略数据参数，则转换参数
 		// 判断 data 是否为 function
 		if ( isFunction( data ) ) {
+
 			// type 赋值 type 或者 callback
 			type = type || callback;
+
 			// callback 赋值 data
 			callback = data;
+
 			// data 赋值 undefined
 			data = undefined;
 		}

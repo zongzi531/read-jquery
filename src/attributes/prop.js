@@ -6,6 +6,7 @@ define( [
 ], function( jQuery, access, support ) {
 
 "use strict";
+
 	// require core.js 获得 jQuery
 	// require core/access.js 获得 access 方法
 	// require support.js 获得 support 对象
@@ -13,21 +14,26 @@ define( [
 
 // 声明 rfocusable 正则表达式 用于判断 input|select|textarea|button
 var rfocusable = /^(?:input|select|textarea|button)$/i,
+
 	// 声明 rclickable 正则表达式 用于判断 a|area
 	rclickable = /^(?:a|area)$/i;
 
 // 使用 jQuery.fn.extend 方法
 jQuery.fn.extend( {
+
 	// prop 方法
 	prop: function( name, value ) {
+
 		// 返回 access( this, jQuery.prop, name, value, arguments.length > 1 )
 		return access( this, jQuery.prop, name, value, arguments.length > 1 );
 	},
 
 	// removeProp 方法
 	removeProp: function( name ) {
+
 		// 返回 遍历当前元素集
 		return this.each( function() {
+
 			// 使用 delete 操作符 删除对应 this[ jQuery.propFix[ name ] || name ]
 			delete this[ jQuery.propFix[ name ] || name ];
 		} );
@@ -36,10 +42,13 @@ jQuery.fn.extend( {
 
 // 使用 jQuery.extend 方法
 jQuery.extend( {
+
 	// prop 方法
 	prop: function( elem, name, value ) {
+
 		// 初始化 ret, hooks
 		var ret, hooks,
+
 			// 声明 nType 赋值 elem.nodeType
 			nType = elem.nodeType;
 
@@ -57,15 +66,18 @@ jQuery.extend( {
 			// 修复名称和挂钩
 			// name 赋值 jQuery.propFix[ name ] 或者 name;
 			name = jQuery.propFix[ name ] || name;
+
 			// hooks 赋值 jQuery.propHooks[ name ];
 			hooks = jQuery.propHooks[ name ];
 		}
 
 		// 判断 value !== undefined
 		if ( value !== undefined ) {
+
 			// 判断 hooks 存在 并且 hooks 存在 set 属性 并且 ( ret = hooks.set( elem, value, name ) ) !== undefined
 			if ( hooks && "set" in hooks &&
 				( ret = hooks.set( elem, value, name ) ) !== undefined ) {
+
 				// 返回 ret
 				return ret;
 			}
@@ -76,6 +88,7 @@ jQuery.extend( {
 
 		// 判断 hooks 存在 并且 hooks 存在 get 属性 并且 ( ret = hooks.get( elem, name ) ) !== null
 		if ( hooks && "get" in hooks && ( ret = hooks.get( elem, name ) ) !== null ) {
+
 			// 返回 ret
 			return ret;
 		}
@@ -86,8 +99,10 @@ jQuery.extend( {
 
 	// propHooks 对象
 	propHooks: {
+
 		// tabIndex 对象
 		tabIndex: {
+
 			// get 方法
 			get: function( elem ) {
 
@@ -102,6 +117,7 @@ jQuery.extend( {
 
 				// 判断 tabindex
 				if ( tabindex ) {
+
 					// 返回 parseInt( tabindex, 10 )
 					return parseInt( tabindex, 10 );
 				}
@@ -114,6 +130,7 @@ jQuery.extend( {
 					rclickable.test( elem.nodeName ) &&
 					elem.href
 				) {
+
 					// 返回 0
 					return 0;
 				}
@@ -144,8 +161,10 @@ jQuery.extend( {
 // eslint 规则“没有未使用的表达式”被禁用，因为它认为这样的代码 noop
 // 判断 !support.optSelected
 if ( !support.optSelected ) {
+
 	// jQuery.propHooks.selected 赋值 对象
 	jQuery.propHooks.selected = {
+
 		// get 方法
 		get: function( elem ) {
 
@@ -153,15 +172,19 @@ if ( !support.optSelected ) {
 
 			// 声明 parent 赋值 elem.parentNode
 			var parent = elem.parentNode;
+
 			// 判断 parent && parent.parentNode
 			if ( parent && parent.parentNode ) {
+
 				// parent.parentNode.selectedIndex
 				// 这里在干嘛？？？
 				parent.parentNode.selectedIndex;
 			}
+
 			// 返回 null
 			return null;
 		},
+
 		// set 方法
 		set: function( elem ) {
 
@@ -169,6 +192,7 @@ if ( !support.optSelected ) {
 
 			// 声明 parent 赋值 elem.parentNode
 			var parent = elem.parentNode;
+
 			// 判断 parent
 			if ( parent ) {
 				parent.selectedIndex;
@@ -195,6 +219,7 @@ jQuery.each( [
 	"frameBorder",
 	"contentEditable"
 ], function() {
+
 	// 为 jQuery.propFix 对象 添加相应属性
 	// 小写键
 	jQuery.propFix[ this.toLowerCase() ] = this;

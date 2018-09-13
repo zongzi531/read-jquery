@@ -4,27 +4,35 @@ define( [
 ], function( jQuery, rcssNum ) {
 
 "use strict";
+
 	// require core.js 获得 jQuery
 	// require var/rcssNum.js 获得 正则表达式
 
 // 声明 adjustCSS 方法
 function adjustCSS( elem, prop, valueParts, tween ) {
+
 	// 初始化 adjusted, scale
 	var adjusted, scale,
+
 		// 声明 maxIterations 赋值 20
 		maxIterations = 20,
+
 		// 声明 currentValue 赋值 tween ? fn : fn
 		currentValue = tween ?
 			function() {
+
 				// 返回 tween.cur()
 				return tween.cur();
 			} :
 			function() {
+
 				// 返回 jQuery.css( elem, prop, "" )
 				return jQuery.css( elem, prop, "" );
 			},
+
 		// 声明 initial 赋值 currentValue()
 		initial = currentValue(),
+
 		// 声明 unit 赋值 valueParts && valueParts[ 3 ] 或者 ( jQuery.cssNumber[ prop ] ? "" : "px" )
 		unit = valueParts && valueParts[ 3 ] || ( jQuery.cssNumber[ prop ] ? "" : "px" ),
 
@@ -62,11 +70,14 @@ function adjustCSS( elem, prop, valueParts, tween ) {
 			// 完成，如果规模等于或交叉1（使旧*新产品不积极）。
 			// 执行 jQuery.style( elem, prop, initialInUnit + unit )
 			jQuery.style( elem, prop, initialInUnit + unit );
+
 			// 判断 ( 1 - scale ) * ( 1 - ( scale = currentValue() / initial || 0.5 ) ) <= 0
 			if ( ( 1 - scale ) * ( 1 - ( scale = currentValue() / initial || 0.5 ) ) <= 0 ) {
+
 				// maxIterations 赋值 0
 				maxIterations = 0;
 			}
+
 			// initialInUnit 赋值 initialInUnit / scale
 			initialInUnit = initialInUnit / scale;
 
@@ -74,6 +85,7 @@ function adjustCSS( elem, prop, valueParts, tween ) {
 
 		// initialInUnit 赋值 initialInUnit * 2
 		initialInUnit = initialInUnit * 2;
+
 		// 执行 jQuery.style( elem, prop, initialInUnit + unit )
 		jQuery.style( elem, prop, initialInUnit + unit );
 
@@ -85,6 +97,7 @@ function adjustCSS( elem, prop, valueParts, tween ) {
 
 	// 判断 valueParts
 	if ( valueParts ) {
+
 		// initialInUnit 赋值 +initialInUnit 或者 +initial 或者 0
 		initialInUnit = +initialInUnit || +initial || 0;
 
@@ -94,16 +107,21 @@ function adjustCSS( elem, prop, valueParts, tween ) {
 		adjusted = valueParts[ 1 ] ?
 			initialInUnit + ( valueParts[ 1 ] + 1 ) * valueParts[ 2 ] :
 			+valueParts[ 2 ];
+
 		// 判断 tween
 		if ( tween ) {
+
 			// tween.unit 赋值 unit
 			tween.unit = unit;
+
 			// tween.start 赋值 initialInUnit
 			tween.start = initialInUnit;
+
 			// tween.end 赋值 adjusted
 			tween.end = adjusted;
 		}
 	}
+
 	// 返回 adjusted
 	return adjusted;
 }

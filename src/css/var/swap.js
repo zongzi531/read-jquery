@@ -6,8 +6,10 @@ define( function() {
 // 一种快速交换入/出CSS属性以获得正确计算的方法。
 // 返回 匿名函数
 return function( elem, options, callback, args ) {
+
 	// 初始化 ret, name
 	var ret, name,
+
 		// 声明 old 赋值 空对象
 		old = {};
 
@@ -15,8 +17,10 @@ return function( elem, options, callback, args ) {
 	// 记住旧的值，插入新的值
 	// 遍历 options
 	for ( name in options ) {
+
 		// old[ name ] 赋值 elem.style[ name ]
 		old[ name ] = elem.style[ name ];
+
 		// elem.style[ name ] 赋值 options[ name ]
 		elem.style[ name ] = options[ name ];
 	}
@@ -28,6 +32,7 @@ return function( elem, options, callback, args ) {
 	// 还原旧值
 	// 遍历 options
 	for ( name in options ) {
+
 		// elem.style[ name ] 赋值 old[ name ]
 		elem.style[ name ] = old[ name ];
 	}

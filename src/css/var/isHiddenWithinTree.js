@@ -6,6 +6,7 @@ define( [
 	// 假设 css
 ], function( jQuery ) {
 	"use strict";
+
 		// require core.js 获得 jQuery
 		// require selector.js
 

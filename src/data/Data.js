@@ -6,6 +6,7 @@ define( [
 ], function( jQuery, camelCase, rnothtmlwhite, acceptData ) {
 
 "use strict";
+
 	// require core.js 获得 jQuery
 	// require core/camelCase.js 获得 camelCase 方法 是将于将css前缀转换成驼峰形式的
 	// require var/rnothtmlwhite.js 获得 正则表达式
@@ -56,6 +57,7 @@ Data.prototype = {
 				// deleted when data is removed
 				// 否则，在不可枚举属性配置中确保它必须为真，以允许在删除数据时删除该属性。
 				} else {
+
 					// 反之使用 Object.defineProperty 设置属性
 					Object.defineProperty( owner, this.expando, {
 						value: value,
@@ -68,8 +70,10 @@ Data.prototype = {
 		// 返回 缓存 value
 		return value;
 	},
+
 	// set 方法
 	set: function( owner, data, value ) {
+
 		// 初始化 prop
 		// 声明 cache 返回当前所有者的缓存
 		var prop,
@@ -79,6 +83,7 @@ Data.prototype = {
 		// Always use camelCase key (gh-2257)
 		// 若传入 data 为 String 类型
 		if ( typeof data === "string" ) {
+
 			// 设置 cache 键值
 			cache[ camelCase( data ) ] = value;
 
@@ -92,11 +97,14 @@ Data.prototype = {
 				cache[ camelCase( prop ) ] = data[ prop ];
 			}
 		}
+
 		// 返回这个 cache
 		return cache;
 	},
+
 	// get 方法
 	get: function( owner, key ) {
+
 		// 如果 key 为传入 则返回当前所有者的缓存
 		// 反之检查当前所有者的缓存是否存在及返回对应的 key 值
 		return key === undefined ?
@@ -106,6 +114,7 @@ Data.prototype = {
 			// 这里始终使用驼峰键值对
 			owner[ this.expando ] && owner[ this.expando ][ camelCase( key ) ];
 	},
+
 	// access 方法
 	access: function( owner, key, value ) {
 
@@ -121,13 +130,13 @@ Data.prototype = {
 		//   2. The data stored at the key
 		//
 		// 在任一情况下：
-		// 
+		//
 		//   1. 未指定密钥
 		//   2. 指定了字符串键，但没有提供任何值。
-		// 
+		//
 		// 采用“读取”路径并允许get方法确定
 		// 返回的值分别为：
-		// 
+		//
 		//   1. 整个缓存对象
 		//   2. 存储在密钥中的数据
 		if ( key === undefined ||
@@ -144,7 +153,7 @@ Data.prototype = {
 		//
 		// 当键不是字符串时，或者键和值都存在
 		// 指定、设置或扩展（现有对象）：
-		// 
+		//
 		//   1.属性对象
 		//   2.关键与价值
 		this.set( owner, key, value );
@@ -155,8 +164,10 @@ Data.prototype = {
 		// 根据所采用的路径返回预期数据[*]
 		return value !== undefined ? value : key;
 	},
+
 	// remove 方法
 	remove: function( owner, key ) {
+
 		// 初始化 i
 		// 声明 cache 获得当前所有者的缓存
 		var i,
@@ -216,15 +227,19 @@ Data.prototype = {
 			if ( owner.nodeType ) {
 				owner[ this.expando ] = undefined;
 			} else {
+
 				// 否则使用 delete 操作符
 				delete owner[ this.expando ];
 			}
 		}
 	},
+
 	// hasData 方法
 	hasData: function( owner ) {
+
 		// 声明 cache 返回当前所有者的缓存
 		var cache = owner[ this.expando ];
+
 		// 判断所有者的缓存是否有属性
 		return cache !== undefined && !jQuery.isEmptyObject( cache );
 	}

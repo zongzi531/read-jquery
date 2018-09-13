@@ -6,6 +6,7 @@ define( [
 ], function( jQuery, toType, isFunction, rnothtmlwhite ) {
 
 "use strict";
+
 	// require core.js 获得 jQuery
 	// require core/toType.js 获得 toType 方法
 	// require var/isFunction.js 获得 isFunction 方法
@@ -15,13 +16,16 @@ define( [
 // 将字符串格式化选项转换为对象格式化选项
 // 声明 createOptions 方法
 function createOptions( options ) {
+
 	// 声明 object = {}
 	var object = {};
+
 	// 使用 jQuery.each 去遍历 options.match( rnothtmlwhite ) || []
 	// 将遍历内容 flag 存放至 object 并标记为 true
 	jQuery.each( options.match( rnothtmlwhite ) || [], function( _, flag ) {
 		object[ flag ] = true;
 	} );
+
 	// 返回 object
 	return object;
 }
@@ -126,11 +130,14 @@ jQuery.Callbacks = function( options ) {
 			// 将 fired 和 firing 设置为 true
 			// 标记 已启动和正在启动 为 true
 			fired = firing = true;
+
 			// 遍历可重复列表的执行数据队列 queue
 			// 所以 firingIndex 每次重置为 -1 ？
 			for ( ; queue.length; firingIndex = -1 ) {
+
 				// memory 获取 queue 的第一个值
 				memory = queue.shift();
+
 				// 遍历 实际回调表，只要 firingIndex 小于 实际回调表的长度即可
 				while ( ++firingIndex < list.length ) {
 
@@ -157,6 +164,7 @@ jQuery.Callbacks = function( options ) {
 			// 忘记数据，如果我们完成了
 			// 若 options.memory 不存在
 			if ( !options.memory ) {
+
 				// 设置 memory = false
 				memory = false;
 			}
@@ -190,6 +198,7 @@ jQuery.Callbacks = function( options ) {
 			// Add a callback or a collection of callbacks to the list
 			// 将回调或回调集合添加到列表中
 			add: function() {
+
 				// 判断 list 是否存在
 				if ( list ) {
 
@@ -197,8 +206,10 @@ jQuery.Callbacks = function( options ) {
 					// 如果我们有过去的记忆，我们应该在添加之后 fire。
 					// 若 memory 存在 并且 firing 为 false
 					if ( memory && !firing ) {
+
 						// firingIndex 为实际回调表的长度 - 1，也就是最后一个
 						firingIndex = list.length - 1;
+
 						// 可重复列表的执行数据队列 queue 加入 memory
 						queue.push( memory );
 					}
@@ -206,17 +217,22 @@ jQuery.Callbacks = function( options ) {
 					// 这里使用了IIFE来制造闭包，存下了 arguments
 					// 也就是 self.add接受的所有参数
 					( function add( args ) {
+
 						// 调用 jQuery.each 遍历 arguments
 						jQuery.each( args, function( _, arg ) {
+
 							// 若传入 arguments 为 function
 							if ( isFunction( arg ) ) {
+
 								// 若 options.unique 为 false
 								// 或者 self.has 方法返回为 false
 								// self.has 暂时还没读
 								if ( !options.unique || !self.has( arg ) ) {
+
 									// 满足以上条件 list 加入 arg
 									list.push( arg );
 								}
+
 								// 若 arg 存在，并且存在 length 并且 arg 不是 String 类型
 							} else if ( arg && arg.length && toType( arg ) !== "string" ) {
 
@@ -230,10 +246,12 @@ jQuery.Callbacks = function( options ) {
 
 					// 若 memory 存在 并且 firing 为 false
 					if ( memory && !firing ) {
+
 						// 执行 fire 方法
 						fire();
 					}
 				}
+
 				// 返回 this
 				return this;
 			},
@@ -241,14 +259,18 @@ jQuery.Callbacks = function( options ) {
 			// Remove a callback from the list
 			// 从列表中删除回调
 			remove: function() {
+
 				// 使用 jQuery.each 遍历 arguments
 				jQuery.each( arguments, function( _, arg ) {
+
 					// 初始化 index
 					var index;
+
 					// 使用 jQuery.inArray 方法查找 list 中是否 含有 arg
 					// 并赋值给 index
 					// 只要 index > -1 就进入循环
 					while ( ( index = jQuery.inArray( arg, list, index ) ) > -1 ) {
+
 						// 移除被查找到的 index
 						list.splice( index, 1 );
 
@@ -256,12 +278,14 @@ jQuery.Callbacks = function( options ) {
 						// 处理 firing indexes
 						// 若 index <= firingIndex
 						if ( index <= firingIndex ) {
+
 							// firingIndex --
 							// 所以这一步是在干什么？
 							firingIndex--;
 						}
 					}
 				} );
+
 				// 返回 this
 				return this;
 			},
@@ -271,6 +295,7 @@ jQuery.Callbacks = function( options ) {
 			// If no argument is given, return whether or not list has callbacks attached.
 			// 如果不给出任何参数，则返回列表是否附加了回调。
 			has: function( fn ) {
+
 				// 返回 fn 是否存在对应的三元表达式值
 				// 若 fn 不存在 返回 list.length > 0
 				// 若 fn 存在 返回 jQuery.inArray( fn, list ) > -1
@@ -282,10 +307,12 @@ jQuery.Callbacks = function( options ) {
 			// Remove all callbacks from the list
 			// 从列表中删除所有回调
 			empty: function() {
+
 				// 若 list 存在则将 list 赋值为 空数组
 				if ( list ) {
 					list = [];
 				}
+
 				// 返回 this
 				return this;
 			},
@@ -297,13 +324,16 @@ jQuery.Callbacks = function( options ) {
 			// Clear all callbacks and values
 			// 清除所有回调和值
 			disable: function() {
+
 				// 这里的操作比 .lock 方法更狠
 				locked = queue = [];
 				list = memory = "";
+
 				// 返回 this
 				return this;
 			},
 			disabled: function() {
+
 				// 返回 !list
 				return !list;
 			},
@@ -315,17 +345,22 @@ jQuery.Callbacks = function( options ) {
 			// Abort any pending executions
 			// 中止任何未决执行
 			lock: function() {
+
 				// 将 locked = queue = []
 				locked = queue = [];
+
 				// 若 memory 返回为 false 并且 firing 返回为 false
 				if ( !memory && !firing ) {
+
 					// 将 list = memory = ""
 					list = memory = "";
 				}
+
 				// 返回 this
 				return this;
 			},
 			locked: function() {
+
 				// 返回 使用 !! 运算符 的 locked 的布尔值
 				return !!locked;
 			},
@@ -333,20 +368,26 @@ jQuery.Callbacks = function( options ) {
 			// Call all callbacks with the given context and arguments
 			// 使用给定的上下文和参数调用所有回调
 			fireWith: function( context, args ) {
+
 				// 若 locked 返回 false
 				if ( !locked ) {
+
 					// 获取 args
 					args = args || [];
+
 					// 重新赋值 args
 					// args.slice ? args.slice() : args 为什么要这么做？
 					args = [ context, args.slice ? args.slice() : args ];
+
 					// queue 加入 args
 					queue.push( args );
+
 					// 若 firing 为 false 执行 fire
 					if ( !firing ) {
 						fire();
 					}
 				}
+
 				// 返回 this
 				return this;
 			},
@@ -354,8 +395,10 @@ jQuery.Callbacks = function( options ) {
 			// Call all the callbacks with the given arguments
 			// 用给定的参数调用所有回调
 			fire: function() {
+
 				// 调用 self.fireWith
 				self.fireWith( this, arguments );
+
 				// 返回 this
 				return this;
 			},
@@ -363,6 +406,7 @@ jQuery.Callbacks = function( options ) {
 			// To know if the callbacks have already been called at least once
 			// 知道回调是否已经至少被调用一次
 			fired: function() {
+
 				// 返回 使用 !! 运算符 的 fired 的布尔值
 				return !!fired;
 			}

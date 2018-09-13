@@ -14,6 +14,7 @@ define( [
 	slice, dataPriv, nodeName ) {
 
 "use strict";
+
 	// require core.js 获得 jQuery
 	// require var/document.js 获得 window.document
 	// require var/documentElement.js 获得 window.document.documentElement
@@ -26,10 +27,13 @@ define( [
 	// require selector.js
 
 var
+
 	// 声明 rkeyEvent 正则表达式 用来检测 键盘事件
 	rkeyEvent = /^key/,
+
 	// 声明 rmouseEvent 正则表达式 用来检测 鼠标事件
 	rmouseEvent = /^(?:mouse|pointer|contextmenu|drag|drop)|click/,
+
 	// 声明 rtypenamespace 正则表达式 （类型命名空间）
 	rtypenamespace = /^([^.]*)(?:\.(.+)|)/;
 
@@ -42,6 +46,7 @@ function returnTrue() {
 function returnFalse() {
 	return false;
 }
+
 // 这里 为什么要用函数呢？？？？
 // 直接 var returnFalse = false 不行嘛？
 
@@ -50,6 +55,7 @@ function returnFalse() {
 // 声明 safeActiveElement 方法
 function safeActiveElement() {
 	try {
+
 		// 尝试 去返回 document.activeElement
 		// 若报错 则忽略
 		return document.activeElement;
@@ -58,6 +64,7 @@ function safeActiveElement() {
 
 // 声明 on 方法
 function on( elem, types, selector, data, fn, one ) {
+
 	// 初始化 origFn, type
 	var origFn, type;
 
@@ -73,16 +80,20 @@ function on( elem, types, selector, data, fn, one ) {
 			// ( types-Object, data )
 			// 若 data 不存在则取 selector
 			data = data || selector;
+
 			// selector = undefined
 			selector = undefined;
 		}
+
 		// 遍历 types 属性
 		for ( type in types ) {
+
 			// 递归调用 on 方法
 			// fn 参数传入 types[ type ]
 			on( elem, type, selector, data, types[ type ], one );
 		}
-		返回 elem
+
+		// 返回 elem
 		return elem;
 	}
 
@@ -92,44 +103,57 @@ function on( elem, types, selector, data, fn, one ) {
 		// ( types, fn )
 		// fn 赋值 selector
 		fn = selector;
+
 		// data = selector = undefined
 		data = selector = undefined;
+
 		// 若 fn == null 的情况
 	} else if ( fn == null ) {
+
 		// 若 selector 为 String 类型
 		if ( typeof selector === "string" ) {
 
 			// ( types, selector, fn )
 			// fn 赋值 data
 			fn = data;
+
 			// data = undefined
 			data = undefined;
+
 		// 若 selector 不为 String 类型
 		} else {
 
 			// ( types, data, fn )
 			// fn 赋值 data
 			fn = data;
+
 			// data 赋值 selector
 			data = selector;
+
 			// selector = undefined
 			selector = undefined;
 		}
 	}
+
 	// 若 fn === false
 	if ( fn === false ) {
+
 		// 赋值 fn = returnFalse 这是一个方法
 		fn = returnFalse;
+
 		// 若 fn 为 除了 false 以外的 使用 ! 操作符可以返回为真的
 	} else if ( !fn ) {
+
 		// 返回 elem
 		return elem;
 	}
 
 	// 若 one === 1
 	if ( one === 1 ) {
+
 		// origFn 赋值 fn
 		origFn = fn;
+
 		// fn 赋值 匿名函数
 		fn = function( event ) {
 
@@ -137,6 +161,7 @@ function on( elem, types, selector, data, fn, one ) {
 			// 可以使用空集，因为事件包含信息
 			// 描述: 移除一个事件处理函数。
 			jQuery().off( event );
+
 			// 返回 origFn(arguments)
 			return origFn.apply( this, arguments );
 		};
@@ -146,8 +171,10 @@ function on( elem, types, selector, data, fn, one ) {
 		// 重新赋值 fn.guid 若 origFn.guid 存在 或者 jQuery.guid++
 		fn.guid = origFn.guid || ( origFn.guid = jQuery.guid++ );
 	}
+
 	// 返回 元素集遍历
 	return elem.each( function() {
+
 		// 调用 jQuery.event.add 方法 这里还没读到
 		jQuery.event.add( this, types, fn, data, selector );
 	} );
@@ -188,10 +215,13 @@ jQuery.event = {
 		// 调用方可以传递自定义数据对象代替处理程序。
 		// 若 handler.handler 存在
 		if ( handler.handler ) {
+
 			// handleObjIn 赋值 handler
 			handleObjIn = handler;
+
 			// handler 赋值 handleObjIn.handler
 			handler = handleObjIn.handler;
+
 			// selector 赋值 handleObjIn.selector
 			selector = handleObjIn.selector;
 		}
@@ -202,6 +232,7 @@ jQuery.event = {
 		// 在 elem 是非元素节点（例如，文档）的情况下，对文档元素进行评估
 		// 若 selector 存在
 		if ( selector ) {
+
 			// 执行 jQuery.find.matchesSelector( documentElement, selector )
 			jQuery.find.matchesSelector( documentElement, selector );
 		}
@@ -210,6 +241,7 @@ jQuery.event = {
 		// 确保处理程序具有唯一的ID，用于以后查找/删除它。
 		// 若 handler.guid 返回为 false 或者 不存在
 		if ( !handler.guid ) {
+
 			// handler.guid 赋值 jQuery.guid++
 			handler.guid = jQuery.guid++;
 		}
@@ -218,11 +250,14 @@ jQuery.event = {
 		// 初始化元素的事件结构和主处理程序，如果这是第一个
 		// events 赋值 elemData.events 后 使用 ! 操作符 返回 true
 		if ( !( events = elemData.events ) ) {
+
 			// 为 events 和 elemData.events 同时赋值 空对象
 			events = elemData.events = {};
 		}
+
 		// eventHandle 赋值 elemData.handle 后 使用 ! 操作符 返回 true
 		if ( !( eventHandle = elemData.handle ) ) {
+
 			// 为 eventHandle 和 elemData.handle 同时赋值 匿名函数
 			eventHandle = elemData.handle = function( e ) {
 
@@ -242,14 +277,19 @@ jQuery.event = {
 		// 处理由空间分隔的多个事件
 		// types 赋值 types 不存在或者 '' 的情况 匹配 rnothtmlwhite 正则表达式 返回结果，若没有 则返回 ['']
 		types = ( types || "" ).match( rnothtmlwhite ) || [ "" ];
+
 		// t 赋值 types 长度
 		t = types.length;
+
 		// 遍历 t
 		while ( t-- ) {
+
 			// tmp 赋值 rtypenamespace 正则表达式 执行 types[ t ] 的结果 或返回 []
 			tmp = rtypenamespace.exec( types[ t ] ) || [];
+
 			// type 和 origType 赋值 tmp[ 1 ]
 			type = origType = tmp[ 1 ];
+
 			// namespaces 赋值 tmp[ 2 ] 不存在或者 '' 的情况 截取 '.' 返回的数组 然后进行排序
 			namespaces = ( tmp[ 2 ] || "" ).split( "." ).sort();
 
@@ -293,8 +333,10 @@ jQuery.event = {
 			// 如果我们是第一个，则初始化事件处理程序队列。
 			// handlers 赋值 events[ type ] 使用 ! 操作符 返回为 true
 			if ( !( handlers = events[ type ] ) ) {
+
 				// handlers 和 events[ type ] 赋值为 空数组
 				handlers = events[ type ] = [];
+
 				// handlers.delegateCount = 0
 				handlers.delegateCount = 0;
 
@@ -306,6 +348,7 @@ jQuery.event = {
 
 					// 若 elem.addEventListener 存在
 					if ( elem.addEventListener ) {
+
 						// 执行 elem.addEventListener( type, eventHandle )
 						elem.addEventListener( type, eventHandle );
 					}
@@ -314,11 +357,13 @@ jQuery.event = {
 
 			// 若 special.add 存在
 			if ( special.add ) {
+
 				// 执行 special.add( handleObj )
 				special.add.call( elem, handleObj );
 
 				// 若 !handleObj.handler.guid 返回为 true
 				if ( !handleObj.handler.guid ) {
+
 					// handleObj.handler.guid = handler.guid
 					handleObj.handler.guid = handler.guid;
 				}
@@ -328,9 +373,11 @@ jQuery.event = {
 			// 添加到元素的处理程序列表中，前面的委托
 			// 若 selector 存在
 			if ( selector ) {
+
 				// 执行 handlers.splice( handlers.delegateCount++, 0, handleObj )
 				handlers.splice( handlers.delegateCount++, 0, handleObj );
 			} else {
+
 				// 否则执行 handlers.push( handleObj )
 				handlers.push( handleObj );
 			}
@@ -368,15 +415,20 @@ jQuery.event = {
 		// 类型中的每个命名空间一次；类型可以省略。
 		// types 赋值 ( types || "" ) 匹配 rnothtmlwhite 正则表达式 返回 [...] 或 [ "" ]
 		types = ( types || "" ).match( rnothtmlwhite ) || [ "" ];
+
 		// t 赋值 types 长度
 		t = types.length;
+
 		// 遍历 t
 		while ( t-- ) {
+
 			// tmp 赋值 rtypenamespace 正则表达式执行 types[ t ] 的结果 或 []
 			// 这里是倒过来的 和 add 方法里的这一步一样
 			tmp = rtypenamespace.exec( types[ t ] ) || [];
+
 			// type 和 origType 赋值 tmp[ 1 ]
 			type = origType = tmp[ 1 ];
+
 			// namespaces 赋值 ( tmp[ 2 ] || "" ) 截取 '.' 后返回的数组 然后进行排序的结果
 			namespaces = ( tmp[ 2 ] || "" ).split( "." ).sort();
 
@@ -384,21 +436,27 @@ jQuery.event = {
 			// 为元素取消绑定所有事件（如果提供此命名空间）
 			// 若 !type 返回为 true
 			if ( !type ) {
+
 				// 遍历 events 对象
 				for ( type in events ) {
+
 					// 递归调用 remove 方法
 					jQuery.event.remove( elem, type + types[ t ], handler, selector, true );
 				}
+
 				// 跳过本次 t 遍历
 				continue;
 			}
 
 			// special 赋值 jQuery.event.special[ type ] 或 空对象
 			special = jQuery.event.special[ type ] || {};
+
 			// type 赋值 若 selector 存在 返回 special.delegateType 否则 返回 special.bindType 若 这里返回值不存在的话 type 还是原来的 type
 			type = ( selector ? special.delegateType : special.bindType ) || type;
+
 			// handlers 赋值 events[ type ] 或 空数组
 			handlers = events[ type ] || [];
+
 			// tmp 赋值 tmp[ 2 ] 存在的情况下的正则表达式 new RegExp( "(^|\\.)" + namespaces.join( "\\.(?:.*\\.|)" ) + "(\\.|$)" )
 			// 当然这个 正则表达式是用来做什么的 我并不知道
 			tmp = tmp[ 2 ] &&
@@ -408,8 +466,10 @@ jQuery.event = {
 			// 删除匹配事件
 			// origCount 和 j 赋值 handlers 的长度
 			origCount = j = handlers.length;
+
 			// 遍历 j
 			while ( j-- ) {
+
 				// handleObj 赋值 handlers[ j ]
 				// 同样 handleObj 这个也是倒过来的
 				handleObj = handlers[ j ];
@@ -417,22 +477,26 @@ jQuery.event = {
 				// 判断 mappedTypes 或 origType === handleObj.origType 存在 并且
 				// !handler 或 handler.guid === handleObj.guid 存在 或返回为 true 并且
 				// （ !tmp 或 tmp.test( handleObj.namespace ) 返回为 true 并且 handleObj.selector ）
-				!selector 或 selector === handleObj.selector 或 selector === "**" 并且
+				// !selector 或 selector === handleObj.selector 或 selector === "**" 并且 handleObj.selector
 				if ( ( mappedTypes || origType === handleObj.origType ) &&
 					( !handler || handler.guid === handleObj.guid ) &&
 					( !tmp || tmp.test( handleObj.namespace ) ) &&
 					( !selector || selector === handleObj.selector ||
 						selector === "**" && handleObj.selector ) ) {
+
 					// handlers 删除 j 位置
 					handlers.splice( j, 1 );
 
 					// 判断 若 handleObj.selector 存在
 					if ( handleObj.selector ) {
+
 						// 执行 handlers.delegateCount--
 						handlers.delegateCount--;
 					}
+
 					// 判断 若 special.remove 存在
 					if ( special.remove ) {
+
 						// 执行 special.remove( handleObj )
 						special.remove.call( elem, handleObj );
 					}
@@ -445,6 +509,7 @@ jQuery.event = {
 			// （在删除特殊事件处理程序时避免无限递归）
 			// 判断 origCount 存在 并且 !handlers.length 返回为 true
 			if ( origCount && !handlers.length ) {
+
 				// 判断 !special.teardown 或 special.teardown.call( elem, namespaces, elemData.handle ) === false
 				if ( !special.teardown ||
 					special.teardown.call( elem, namespaces, elemData.handle ) === false ) {
@@ -462,6 +527,7 @@ jQuery.event = {
 		// 删除数据和扩展号，如果不再使用
 		// 判断 events 若为空对象
 		if ( jQuery.isEmptyObject( events ) ) {
+
 			// 执行 dataPriv.remove( elem, "handle events" )
 			dataPriv.remove( elem, "handle events" );
 		}
@@ -491,6 +557,7 @@ jQuery.event = {
 
 		// 遍历 arguments 从第二位开始
 		for ( i = 1; i < arguments.length; i++ ) {
+
 			// args[ i ] 赋值 arguments[ i ]
 			args[ i ] = arguments[ i ];
 		}
@@ -515,13 +582,16 @@ jQuery.event = {
 		// 首先代表代表，他们可能希望停止在我们下面传播。
 		// i 赋值 0
 		i = 0;
+
 		// 遍历 matched = handlerQueue[ i++ ] 并且 !event.isPropagationStopped()
 		while ( ( matched = handlerQueue[ i++ ] ) && !event.isPropagationStopped() ) {
+
 			// event.currentTarget 赋值 matched.elem
 			event.currentTarget = matched.elem;
 
 			// j 赋值 0
 			j = 0;
+
 			// 遍历 handleObj = matched.handlers[ j++ ] 并且 !event.isImmediatePropagationStopped()
 			while ( ( handleObj = matched.handlers[ j++ ] ) &&
 				!event.isImmediatePropagationStopped() ) {
@@ -534,6 +604,7 @@ jQuery.event = {
 
 					// event.handleObj 赋值 handleObj
 					event.handleObj = handleObj;
+
 					// event.data 赋值 handleObj.data
 					event.data = handleObj.data;
 
@@ -544,8 +615,10 @@ jQuery.event = {
 
 					// 判断 ret !== undefined
 					if ( ret !== undefined ) {
+
 						// 判断 ( event.result = ret ) === false
 						if ( ( event.result = ret ) === false ) {
+
 							// 执行 event.preventDefault()
 							// Event 接口的 preventDefault( ) 方法，告诉user agent：如果此事件没有需要显式处理，那么它默认的动作也不要做（因为默认是要做的）。此事件还是继续传播，除非碰到事件侦听器调用stopPropagation() 或stopImmediatePropagation()，才停止传播。
 							// 执行 event.stopPropagation()
@@ -562,6 +635,7 @@ jQuery.event = {
 		// 调用映射类型的后调度钩子
 		// 判断 special.postDispatch
 		if ( special.postDispatch ) {
+
 			// 执行 special.postDispatch( event )
 			special.postDispatch.call( this, event );
 		}
@@ -572,12 +646,16 @@ jQuery.event = {
 
 	// handlers 方法
 	handlers: function( event, handlers ) {
+
 		// 初始化 i, handleObj, sel, matchedHandlers, matchedSelectors,
 		var i, handleObj, sel, matchedHandlers, matchedSelectors,
+
 			// 声明 handlerQueue 赋值 []
 			handlerQueue = [],
+
 			// 声明 delegateCount 赋值 handlers.delegateCount
 			delegateCount = handlers.delegateCount,
+
 			// 声明 cur 赋值 event.target
 			cur = event.target;
 
@@ -613,12 +691,16 @@ jQuery.event = {
 				// 不要处理禁用元素的点击
 				// 判断 cur.nodeType === 1 并且 !( event.type === "click" && cur.disabled === true ) 返回为 true
 				if ( cur.nodeType === 1 && !( event.type === "click" && cur.disabled === true ) ) {
+
 					// matchedHandlers 赋值 []
 					matchedHandlers = [];
+
 					// matchedSelectors 赋值 {}
 					matchedSelectors = {};
+
 					// 遍历 delegateCount
 					for ( i = 0; i < delegateCount; i++ ) {
+
 						// handleObj 赋值 handlers[ i ]
 						handleObj = handlers[ i ];
 
@@ -629,20 +711,25 @@ jQuery.event = {
 
 						// 判断 matchedSelectors[ sel ] === undefined
 						if ( matchedSelectors[ sel ] === undefined ) {
+
 							// matchedSelectors[ sel ] 赋值 若 handleObj.needsContext 存在 返回 jQuery( sel, this ).index( cur ) > -1
 							// 反之 返回 jQuery.find( sel, this, null, [ cur ] ).length
 							matchedSelectors[ sel ] = handleObj.needsContext ?
 								jQuery( sel, this ).index( cur ) > -1 :
 								jQuery.find( sel, this, null, [ cur ] ).length;
 						}
+
 						// 判断 matchedSelectors[ sel ]
 						if ( matchedSelectors[ sel ] ) {
+
 							// matchedHandlers 加入 handleObj
 							matchedHandlers.push( handleObj );
 						}
 					}
+
 					// 判断 matchedHandlers.length
 					if ( matchedHandlers.length ) {
+
 						// handlerQueue 加入 { elem: cur, handlers: matchedHandlers }
 						handlerQueue.push( { elem: cur, handlers: matchedHandlers } );
 					}
@@ -656,8 +743,10 @@ jQuery.event = {
 		// cur 在上面这个 for 循环的结束的时候不就为this了么？？
 		// 噢,要满足上面那些判断条件的
 		cur = this;
+
 		// 判断 delegateCount < handlers.length
 		if ( delegateCount < handlers.length ) {
+
 			// handlerQueue 加入 { elem: cur, handlers: handlers.slice( delegateCount ) }
 			handlerQueue.push( { elem: cur, handlers: handlers.slice( delegateCount ) } );
 		}
@@ -668,14 +757,17 @@ jQuery.event = {
 
 	// addProp 方法
 	addProp: function( name, hook ) {
+
 		// Object.defineProperty() 方法会直接在一个对象上定义一个新属性，或者修改一个对象的现有属性， 并返回这个对象。
 		// Object.defineProperty(obj, prop, descriptor)
 		// obj 要在其上定义属性的对象。
 		// prop 要定义或修改的属性的名称。
 		// descriptor 将被定义或修改的属性描述符。
 		Object.defineProperty( jQuery.Event.prototype, name, {
+
 			// enumerable 当且仅当该属性的enumerable为true时，该属性才能够出现在对象的枚举属性中。默认为 false。
 			enumerable: true,
+
 			// configurable 当且仅当该属性的 configurable 为 true 时，该属性描述符才能够被改变，同时该属性也能从对应的对象上被删除。默认为 false。
 			configurable: true,
 
@@ -683,15 +775,19 @@ jQuery.event = {
 			// 判断 hook 是否为 function
 			get: isFunction( hook ) ?
 				function() {
+
 					// 判断 this.originalEvent
 					if ( this.originalEvent ) {
+
 							// 返回 hook( this.originalEvent )
 							return hook( this.originalEvent );
 					}
 				} :
 				function() {
+
 					// 判断 this.originalEvent
 					if ( this.originalEvent ) {
+
 							// 返回 this.originalEvent[ name ]
 							return this.originalEvent[ name ];
 					}
@@ -702,8 +798,10 @@ jQuery.event = {
 				Object.defineProperty( this, name, {
 					enumerable: true,
 					configurable: true,
+
 					// writable 当且仅当该属性的writable为true时，value才能被赋值运算符改变。默认为 false。
 					writable: true,
+
 					// value 该属性对应的值。可以是任何有效的 JavaScript 值（数值，对象，函数等）。默认为 undefined。
 					value: value
 				} );
@@ -713,6 +811,7 @@ jQuery.event = {
 
 	// fix 方法
 	fix: function( originalEvent ) {
+
 		// 返回 若 originalEvent[ jQuery.expando ] 存在 返回 originalEvent 反之 实例化一个 jQuery.Event( originalEvent )
 		return originalEvent[ jQuery.expando ] ?
 			originalEvent :
@@ -721,6 +820,7 @@ jQuery.event = {
 
 	// special 对象
 	special: {
+
 		// load 对象
 		load: {
 
@@ -728,6 +828,7 @@ jQuery.event = {
 			// 防止触发映像。加载事件从冒泡到 window.load
 			noBubble: true
 		},
+
 		// focus 对象
 		focus: {
 
@@ -735,30 +836,39 @@ jQuery.event = {
 			// 如果可能的话，激发本地事件，这样 blur/focus 序列是正确的
 			// trigger 方法
 			trigger: function() {
+
 				// 判断 this !== safeActiveElement() && this.focus
 				if ( this !== safeActiveElement() && this.focus ) {
+
 					// 执行 this.focus()
 					this.focus();
+
 					// 返回 false
 					return false;
 				}
 			},
 			delegateType: "focusin"
 		},
+
 		// blur 对象
 		blur: {
+
 			// trigger 方法
 			trigger: function() {
+
 				// 判断 this === safeActiveElement() && this.blur
 				if ( this === safeActiveElement() && this.blur ) {
+
 					// 执行 this.blur()
 					this.blur();
+
 					// 返回 false
 					return false;
 				}
 			},
 			delegateType: "focusout"
 		},
+
 		// click 对象
 		click: {
 
@@ -766,10 +876,13 @@ jQuery.event = {
 			// 对于复选框，fire native event 如此检查状态将是正确的。
 			// trigger 方法
 			trigger: function() {
+
 				// 判断 this.type === "checkbox" && this.click && nodeName( this, "input" )
 				if ( this.type === "checkbox" && this.click && nodeName( this, "input" ) ) {
+
 					// 执行 this.click()
 					this.click();
+
 					// 返回 false
 					return false;
 				}
@@ -779,6 +892,7 @@ jQuery.event = {
 			// 对于跨浏览器的一致性，不要在链接上激发本地 .click()
 			// _default 方法
 			_default: function( event ) {
+
 				// 返回 nodeName( event.target, "a" )
 				return nodeName( event.target, "a" );
 			}
@@ -786,6 +900,7 @@ jQuery.event = {
 
 		// beforeunload 对象
 		beforeunload: {
+
 			// postDispatch 方法
 			postDispatch: function( event ) {
 
@@ -794,6 +909,7 @@ jQuery.event = {
 				// 如果没有设置返回值字段，Firefox不会发出警报。
 				// 判断 event.result !== undefined && event.originalEvent
 				if ( event.result !== undefined && event.originalEvent ) {
+
 					// event.originalEvent.returnValue 赋值 event.result
 					event.originalEvent.returnValue = event.result;
 				}
@@ -809,6 +925,7 @@ jQuery.removeEvent = function( elem, type, handle ) {
 	// 这个 “if” 是平原对象所需要的。
 	// 判断 elem.removeEventListener
 	if ( elem.removeEventListener ) {
+
 		// 执行 elem.removeEventListener( type, handle )
 		elem.removeEventListener( type, handle );
 	}
@@ -821,6 +938,7 @@ jQuery.Event = function( src, props ) {
 	// 允许没有 “new” 关键字的实例化
 	// 判断 !( this instanceof jQuery.Event )
 	if ( !( this instanceof jQuery.Event ) ) {
+
 		// 返回 实例化 jQuery.Event( src, props )
 		return new jQuery.Event( src, props );
 	}
@@ -829,8 +947,10 @@ jQuery.Event = function( src, props ) {
 	// 事件对象
 	// 判断 src && src.type
 	if ( src && src.type ) {
+
 		// this.originalEvent 赋值 src
 		this.originalEvent = src;
+
 		// this.type 赋值 src.type
 		this.type = src.type;
 
@@ -860,12 +980,14 @@ jQuery.Event = function( src, props ) {
 
 		// this.currentTarget 赋值 src.currentTarget
 		this.currentTarget = src.currentTarget;
+
 		// this.relatedTarget 赋值 src.relatedTarget
 		this.relatedTarget = src.relatedTarget;
 
 	// Event type
 	// 事件类型
 	} else {
+
 		// this.type 赋值 src
 		this.type = src;
 	}
@@ -874,6 +996,7 @@ jQuery.Event = function( src, props ) {
 	// 将显式提供的属性放在事件对象上
 	// 判断 props
 	if ( props ) {
+
 		// 使用 jQuery.extend 组合 this 和 props
 		jQuery.extend( this, props );
 	}
@@ -894,8 +1017,10 @@ jQuery.Event = function( src, props ) {
 // https://www.w3.org/TR/2003/WD-DOM-Level-3-Events-20030331/ecma-script-binding.html
 // jQuery.Event.prototype 对象
 jQuery.Event.prototype = {
+
 	// constructor 构造器
 	constructor: jQuery.Event,
+
 	// 一些状态 isDefaultPrevented, isPropagationStopped, isImmediatePropagationStopped, isSimulated
 	isDefaultPrevented: returnFalse,
 	isPropagationStopped: returnFalse,
@@ -904,6 +1029,7 @@ jQuery.Event.prototype = {
 
 	// preventDefault 方法
 	preventDefault: function() {
+
 		// 声明 e 赋值 this.originalEvent
 		var e = this.originalEvent;
 
@@ -912,12 +1038,15 @@ jQuery.Event.prototype = {
 
 		// 判断 e && !this.isSimulated
 		if ( e && !this.isSimulated ) {
+
 			// 执行 原生事件 e.preventDefault()
 			e.preventDefault();
 		}
 	},
+
 	// stopPropagation 方法
 	stopPropagation: function() {
+
 		// 声明 e 赋值 this.originalEvent
 		var e = this.originalEvent;
 
@@ -926,12 +1055,15 @@ jQuery.Event.prototype = {
 
 		// 判断 e && !this.isSimulated
 		if ( e && !this.isSimulated ) {
+
 			// 执行 原生事件 e.stopPropagation()
 			e.stopPropagation();
 		}
 	},
+
 	// stopImmediatePropagation 方法
 	stopImmediatePropagation: function() {
+
 		// 声明 e 赋值 this.originalEvent
 		var e = this.originalEvent;
 
@@ -940,6 +1072,7 @@ jQuery.Event.prototype = {
 
 		// 判断 e && !this.isSimulated
 		if ( e && !this.isSimulated ) {
+
 			// 执行 原生事件 e.stopImmediatePropagation()
 			e.stopImmediatePropagation();
 		}
@@ -964,6 +1097,7 @@ jQuery.each( {
 	pageY: true,
 	shiftKey: true,
 	view: true,
+
 	// 为啥 char 用 String 类型
 	"char": true,
 	charCode: true,
@@ -985,6 +1119,7 @@ jQuery.each( {
 
 	// which 方法
 	which: function( event ) {
+
 		// 声明 button 赋值 event.button
 		var button = event.button;
 
@@ -992,6 +1127,7 @@ jQuery.each( {
 		// 为关键事件添加
 		// 判断 event.which == null && rkeyEvent.test( event.type )
 		if ( event.which == null && rkeyEvent.test( event.type ) ) {
+
 			// 返回 event.charCode != null ? event.charCode : event.keyCode
 			return event.charCode != null ? event.charCode : event.keyCode;
 		}
@@ -1000,6 +1136,7 @@ jQuery.each( {
 		// 为点击添加：1 === 左；2 === 中间；3 === 右
 		// 判断 !event.which && button !== undefined && rmouseEvent.test( event.type )
 		if ( !event.which && button !== undefined && rmouseEvent.test( event.type ) ) {
+
 			// & 运算符：
 			// https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators#Bitwise_AND
 			// https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Assignment_Operators
@@ -1021,6 +1158,7 @@ jQuery.each( {
 		// 返回 event.which
 		return event.which;
 	}
+
 	// 传入 jQuery.event.addProp 方法
 }, jQuery.event.addProp );
 
@@ -1041,8 +1179,10 @@ jQuery.each( {
 	mouseleave: "mouseout",
 	pointerenter: "pointerover",
 	pointerleave: "pointerout"
+
 	// 回调
 }, function( orig, fix ) {
+
 	// jQuery.event.special[ orig ] 赋值 对象
 	jQuery.event.special[ orig ] = {
 		delegateType: fix,
@@ -1050,12 +1190,16 @@ jQuery.each( {
 
 		// handle 方法
 		handle: function( event ) {
+
 			// 初始化 ret
 			var ret,
+
 				// 声明 target 赋值 this
 				target = this,
+
 				// 声明 related 赋值 event.relatedTarget
 				related = event.relatedTarget,
+
 				// 声明 handleObj 赋值 event.handleObj
 				handleObj = event.handleObj;
 
@@ -1065,13 +1209,17 @@ jQuery.each( {
 			// NB: 如果鼠标左/进入浏览器窗口，则没有相关的目标
 			// 判断 !related || ( related !== target && !jQuery.contains( target, related ) )
 			if ( !related || ( related !== target && !jQuery.contains( target, related ) ) ) {
+
 				// event.type 赋值 handleObj.origType
 				event.type = handleObj.origType;
+
 				// ret 赋值 执行 handleObj.handler( arguments )
 				ret = handleObj.handler.apply( this, arguments );
+
 				// event.type 赋值 fix
 				event.type = fix;
 			}
+
 			// 返回 ret
 			return ret;
 		}
@@ -1083,24 +1231,31 @@ jQuery.fn.extend( {
 
 	// on 方法
 	on: function( types, selector, data, fn ) {
+
 		// 方法 on( this, types, selector, data, fn )
 		return on( this, types, selector, data, fn );
 	},
+
 	// one 方法
 	one: function( types, selector, data, fn ) {
+
 		// 方法 on( this, types, selector, data, fn, 1 )
 		return on( this, types, selector, data, fn, 1 );
 	},
+
 	// off 方法
 	off: function( types, selector, fn ) {
+
 		// 初始化 handleObj, type
 		var handleObj, type;
+
 		// 判断 types && types.preventDefault && types.handleObj
 		if ( types && types.preventDefault && types.handleObj ) {
 
 			// ( event )  dispatched jQuery.Event
 			// handleObj 赋值 types.handleObj
 			handleObj = types.handleObj;
+
 			// 递归调用 jQuery( types.delegateTarget ).off 方法
 			jQuery( types.delegateTarget ).off(
 				handleObj.namespace ?
@@ -1109,37 +1264,47 @@ jQuery.fn.extend( {
 				handleObj.selector,
 				handleObj.handler
 			);
+
 			// 返回 this
 			return this;
 		}
+
 		// 判断 typeof types === "object"
 		if ( typeof types === "object" ) {
 
 			// ( types-object [, selector] )
 			// 遍历 types
 			for ( type in types ) {
+
 				// 递归调用 this.off( type, selector, types[ type ] ) 方法
 				this.off( type, selector, types[ type ] );
 			}
+
 			// 返回 this
 			return this;
 		}
+
 		// 判断 selector === false || typeof selector === "function"
 		if ( selector === false || typeof selector === "function" ) {
 
 			// ( types [, fn] )
 			// fn 赋值 selector
 			fn = selector;
+
 			// selector 赋值 undefined
 			selector = undefined;
 		}
+
 		// 判断 fn === false
 		if ( fn === false ) {
+
 			// fn 赋值 returnFalse
 			fn = returnFalse;
 		}
+
 		// 返回 this.each 方法执行结果
 		return this.each( function() {
+
 			// 调用 jQuery.event.remove( this, types, fn, selector )
 			jQuery.event.remove( this, types, fn, selector );
 		} );

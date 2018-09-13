@@ -4,6 +4,7 @@ define( [
 ], function( jQuery, Sizzle ) {
 
 "use strict";
+
   // require core.js 获得 jQuery
   // require external/sizzle/dist/sizzle.js 获得 Sizzle
 

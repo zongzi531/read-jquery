@@ -13,17 +13,21 @@ define( [
 	// require callbacks.js
 // 声明 Identity 方法
 function Identity( v ) {
+
 	// 返回 v
 	return v;
 }
+
 // 声明 Thrower 方法
 function Thrower( ex ) {
+
 	// 抛出 ex 异常
 	throw ex;
 }
 
 // 声明 adoptValue 方法
 function adoptValue( value, resolve, reject, noValue ) {
+
 	// 初始化 method
 	var method;
 
@@ -34,6 +38,7 @@ function adoptValue( value, resolve, reject, noValue ) {
 		// 检查 value 是否存在 并且 value.promise 是否为 function
 		// 绑定至 method
 		if ( value && isFunction( ( method = value.promise ) ) ) {
+
 			// method 绑定 value 执行
 			// 链式调用 done 和 fail
 			method.call( value ).done( resolve ).fail( reject );
@@ -42,6 +47,7 @@ function adoptValue( value, resolve, reject, noValue ) {
 		// 另外 thenables 对象
 		// 检查 value 是否存在 并且 value.then 是否为 function
 		} else if ( value && isFunction( ( method = value.then ) ) ) {
+
 			// then 方法传入 resolve, reject 执行
 			method.call( value, resolve, reject );
 
@@ -76,6 +82,7 @@ jQuery.extend( {
 
 	// Deferred
 	Deferred: function( func ) {
+
 		// 声明 tuples
 		var tuples = [
 
@@ -93,26 +100,35 @@ jQuery.extend( {
 				[ "reject", "fail", jQuery.Callbacks( "once memory" ),
 					jQuery.Callbacks( "once memory" ), 1, "rejected" ]
 			],
+
 			// 声明 state = "pending"
 			state = "pending",
+
 			// 声明 promise 对象
 			promise = {
+
 				// state 方法
 				state: function() {
+
 					// 返回 state
 					return state;
 				},
+
 				// always 方法
 				always: function() {
+
 					// 再执行一遍 done 方法和 fail 方法
 					// 传入 arguments
 					// 原来 always 方法是这样写的 有点意思
 					deferred.done( arguments ).fail( arguments );
+
 					// 返回 this
 					return this;
 				},
+
 				// catch 方法
 				"catch": function( fn ) {
+
 					// 学过 Promise 的就知道， catch 就是 then 的第二参数的快捷写法
 					// 返回 promise.then( null, fn )
 					return promise.then( null, fn );
@@ -122,6 +138,7 @@ jQuery.extend( {
 				// 保持背部的管子
 				// pipe 方法
 				pipe: function( /* fnDone, fnFail, fnProgress */ ) {
+
 					// 看起来 像是接受参数 fnDone, fnFail, fnProgress
 					// 声明 fns 赋值 arguments
 					var fns = arguments;
@@ -129,6 +146,7 @@ jQuery.extend( {
 					// 返回 jQuery.Deferred 在调用 promise 执行的方法
 					// Deferred 本身就接受一个参数 func
 					return jQuery.Deferred( function( newDefer ) {
+
 						// 使用 jQuery.each 去遍历 tuples 返回 i, tuple
 						jQuery.each( tuples, function( i, tuple ) {
 
@@ -145,11 +163,14 @@ jQuery.extend( {
 							// tuple[ 1 ] 是 add listener（添加侦听器）
 							// 调用 deferred 对应的 侦听器 看上面默认的三个注释
 							deferred[ tuple[ 1 ] ]( function() {
+
 								// 声明 returned 为 fn 存在并且 fn(arguments)
 								// 此 arguments 为当前作用域内的 arguments
 								var returned = fn && fn.apply( this, arguments );
+
 								// 判断 若 returned 存在 并且 returned.promise 是 function
 								if ( returned && isFunction( returned.promise ) ) {
+
 									// 执行 returned.promise()
 									// 然后链式调用这些
 									// 具体在干啥 我没看懂
@@ -158,6 +179,7 @@ jQuery.extend( {
 										.done( newDefer.resolve )
 										.fail( newDefer.reject );
 								} else {
+
 									// tuple[ 0 ] action（操作）
 									// 这个在干嘛呢 我也不知道
 									// 调用 newDefer[ tuple[ 0 ] + "With" ]
@@ -169,24 +191,33 @@ jQuery.extend( {
 								}
 							} );
 						} );
+
 						// 释放 fns 内存
 						fns = null;
 					} ).promise();
 				},
+
 				// then 方法
 				then: function( onFulfilled, onRejected, onProgress ) {
+
 					// 声明 maxDepth = 0
 					var maxDepth = 0;
+
 					// 声明 resolve 方法
 					function resolve( depth, deferred, handler, special ) {
+
 						// 返回 匿名函数
 						return function() {
+
 							// 声明 that 绑定 this
 							var that = this,
+
 								// 声明 args 赋值 匿名函数接受 arguments
 								args = arguments,
+
 								// 声明 mightThrow 函数
 								mightThrow = function() {
+
 									// 初始化 returned, then
 									var returned, then;
 
@@ -238,6 +269,7 @@ jQuery.extend( {
 										// 特殊处理器（通知）等待解析
 										// 若 special 为 真
 										if ( special ) {
+
 											// 执行 then(
 											// 	resolve( maxDepth, deferred, Identity, special ),
 											// 	resolve( maxDepth, deferred, Thrower, special )
@@ -282,8 +314,10 @@ jQuery.extend( {
 										// 和多个值（非规范行为）
 										// 若 handler !== Identity
 										if ( handler !== Identity ) {
+
 											// that 赋值 undefined
 											that = undefined;
+
 											// args 赋值 [ returned ]
 											args = [ returned ];
 										}
@@ -307,6 +341,7 @@ jQuery.extend( {
 									mightThrow :
 									function() {
 										try {
+
 											// 尝试去执行
 											mightThrow();
 										} catch ( e ) {
@@ -335,8 +370,10 @@ jQuery.extend( {
 												// 和多个值（非规范行为）
 												// 若 handler !== Thrower
 												if ( handler !== Thrower ) {
+
 													// that 赋值 undefined
 													that = undefined;
+
 													// args 赋值 [ e ]
 													args = [ e ];
 												}
@@ -363,10 +400,12 @@ jQuery.extend( {
 								// 因为当执行异步时它会丢失。
 								// 若 jQuery.Deferred.getStackHook 存在
 								if ( jQuery.Deferred.getStackHook ) {
+
 									// 执行 jQuery.Deferred.getStackHook
 									// 将返回值 赋值给 process.stackTrace
 									process.stackTrace = jQuery.Deferred.getStackHook();
 								}
+
 								// 使用 window.setTimeout 方法延迟 process 执行
 								window.setTimeout( process );
 							}
@@ -428,11 +467,13 @@ jQuery.extend( {
 				// 如果提供 obj，则将允诺方面添加到对象中。
 				// promise 方法
 				promise: function( obj ) {
+
 					// 返回 若 obj != null 返回 jQuery.extend( obj, promise )
 					// 否则返回 promise
 					return obj != null ? jQuery.extend( obj, promise ) : promise;
 				}
 			},
+
 			// 声明 deferred 对象
 			deferred = {};
 
@@ -440,11 +481,13 @@ jQuery.extend( {
 		// 添加列表特定方法
 		// 使用 jQuery.each 遍历 tuples
 		jQuery.each( tuples, function( i, tuple ) {
+
 			// 声明 list 获取 tuple[ 2 ]
 			// jQuery.Callbacks( "memory" )
 			// jQuery.Callbacks( "once memory" )
 			// jQuery.Callbacks( "once memory" )
 			var list = tuple[ 2 ],
+
 				// 声明 stateString 获取 tuple[ 5 ]
 				// undefined
 				// "resolved"
@@ -461,8 +504,10 @@ jQuery.extend( {
 			// 句柄状态
 			// 若 stateString 存在 也就是 返回 "resolved" 或 "rejected"
 			if ( stateString ) {
+
 				// 调用 list.add 方法
 				list.add(
+
 					// 传入 匿名函数
 					function() {
 
@@ -504,10 +549,12 @@ jQuery.extend( {
 			// deferred.reject = function() { deferred.rejectWith(...) }
 			// 原注释同样枚举了三种情况
 			deferred[ tuple[ 0 ] ] = function() {
+
 				// 这里看一看传参
 				// 第一参数 若 this === deferred 返回 undefined 否则返回 this
 				// 第二参数 arguments
 				deferred[ tuple[ 0 ] + "With" ]( this === deferred ? undefined : this, arguments );
+
 				// 返回 this
 				return this;
 			};
@@ -526,6 +573,7 @@ jQuery.extend( {
 		// Call given func if any
 		// 若 func 存在 则执行
 		if ( func ) {
+
 			// func( deferred )
 			func.call( deferred, deferred );
 		}
@@ -556,6 +604,7 @@ jQuery.extend( {
 			// 下属履行数据
 			// 声明 resolveContexts 为 i 数量的数组
 			resolveContexts = Array( i ),
+
 			// 声明 resolveValues 赋值 Array.prototype.slice(arguments)
 			resolveValues = slice.call( arguments ),
 
@@ -567,15 +616,19 @@ jQuery.extend( {
 			// 下属回调工厂
 			// 声明 updateFunc 方法
 			updateFunc = function( i ) {
+
 				// 返回 匿名函数
 				return function( value ) {
+
 					// resolveContexts[ i ] 存放 当前匿名函数指向 this
 					// resolveValues[ i ] 存放 当前匿名函数 arguments 若 arguments 长度 <= 1 则存放 value
 					resolveContexts[ i ] = this;
 					resolveValues[ i ] = arguments.length > 1 ? slice.call( arguments ) : value;
+
 					// 判断 !( --remaining )
 					// 若 remaining 还有 则进入判断
 					if ( !( --remaining ) ) {
+
 						// 调用 jQuery.Deferred() 返回对象的 resolveWith 方法
 						// 传入 resolveContexts, resolveValues
 						master.resolveWith( resolveContexts, resolveValues );
@@ -587,6 +640,7 @@ jQuery.extend( {
 		// 单参数和空参数采用类似的解决方案。
 		// 若 remaining 参数 <= 1
 		if ( remaining <= 1 ) {
+
 			// 执行 adoptValue 方法
 			// 传入第一参数 singleValue
 			// 第二参数 master.done( updateFunc( i ) ).resolve
@@ -612,6 +666,7 @@ jQuery.extend( {
 		// 多个参数像约定一样聚合：所有数组元素
 		// 遍历开始
 		while ( i-- ) {
+
 			// 执行 adoptValue 方法
 			// 有点意思 adoptValue 方法 和上面是在做一样的事情哎
 			adoptValue( resolveValues[ i ], updateFunc( i ), master.reject );

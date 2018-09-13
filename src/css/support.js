@@ -6,6 +6,7 @@ define( [
 ], function( jQuery, document, documentElement, support ) {
 
 "use strict";
+
 	// require core.js 获得 jQuery
 	// require var/document.js 获得 window.document
 	// require var/documentElement.js 获得 window.document.documentElement
@@ -30,16 +31,19 @@ define( [
 		// container.style.cssText 赋值 "position:absolute;left:-11111px;width:60px;" + "margin-top:1px;padding:0;border:0"
 		container.style.cssText = "position:absolute;left:-11111px;width:60px;" +
 			"margin-top:1px;padding:0;border:0";
+
 		// div.style.cssText 赋值 "position:relative;display:block;box-sizing:border-box;overflow:scroll;" + "margin:auto;border:1px;padding:1px;" + "width:60%;top:1%"
 		div.style.cssText =
 			"position:relative;display:block;box-sizing:border-box;overflow:scroll;" +
 			"margin:auto;border:1px;padding:1px;" +
 			"width:60%;top:1%";
+
 		// 执行 documentElement.appendChild( container ).appendChild( div )
 		documentElement.appendChild( container ).appendChild( div );
 
 		// 声明 divStyle 赋值 window.getComputedStyle( div )
 		var divStyle = window.getComputedStyle( div );
+
 		// pixelPositionVal 赋值 divStyle.top !== "1%"
 		pixelPositionVal = divStyle.top !== "1%";
 
@@ -52,6 +56,7 @@ define( [
 		// 一些样式以百分比值返回，即使它们不应该。
 		// div.style.right 赋值 "60%"
 		div.style.right = "60%";
+
 		// pixelBoxStylesVal 赋值 roundPixelMeasures( divStyle.right ) === 36
 		pixelBoxStylesVal = roundPixelMeasures( divStyle.right ) === 36;
 
@@ -66,6 +71,7 @@ define( [
 		// 检测溢出：滚动螺纹
 		// div.style.position 赋值 "absolute"
 		div.style.position = "absolute";
+
 		// scrollboxSizeVal 赋值 div.offsetWidth === 36 或者 "absolute"
 		scrollboxSizeVal = div.offsetWidth === 36 || "absolute";
 
@@ -81,6 +87,7 @@ define( [
 
 	// 声明 roundPixelMeasures 函数
 	function roundPixelMeasures( measure ) {
+
 		// 返回 Math.round( parseFloat( measure ) )
 		return Math.round( parseFloat( measure ) );
 	}
@@ -88,8 +95,10 @@ define( [
 	// 初始化 pixelPositionVal, boxSizingReliableVal, scrollboxSizeVal, pixelBoxStylesVal, reliableMarginLeftVal
 	var pixelPositionVal, boxSizingReliableVal, scrollboxSizeVal, pixelBoxStylesVal,
 		reliableMarginLeftVal,
+
 		// 声明 container 赋值 document.createElement( "div" )
 		container = document.createElement( "div" ),
+
 		// 声明 div 赋值 document.createElement( "div" )
 		div = document.createElement( "div" );
 
@@ -105,45 +114,62 @@ define( [
 	// 克隆元件的类型影响源元件克隆
 	// div.style.backgroundClip 赋值 "content-box"
 	div.style.backgroundClip = "content-box";
+
 	// div.cloneNode( true ).style.backgroundClip 赋值 ""
 	div.cloneNode( true ).style.backgroundClip = "";
+
 	// support.clearCloneStyle 赋值 div.style.backgroundClip === "content-box"
 	support.clearCloneStyle = div.style.backgroundClip === "content-box";
 
 	// 执行 jQuery.extend 方法 对 support 对象 进行 操作
 	jQuery.extend( support, {
+
 		// boxSizingReliable 方法
 		boxSizingReliable: function() {
+
 			// 执行 computeStyleTests()
 			computeStyleTests();
+
 			// 返回 boxSizingReliableVal
 			return boxSizingReliableVal;
 		},
+
 		// pixelBoxStyles 方法
 		pixelBoxStyles: function() {
+
 			// 执行 computeStyleTests()
 			computeStyleTests();
+
 			// 返回 pixelBoxStylesVal
 			return pixelBoxStylesVal;
 		},
+
 		// pixelPosition 方法
 		pixelPosition: function() {
+
 			// 执行 computeStyleTests()
 			computeStyleTests();
+
 			// 返回 pixelPositionVal
 			return pixelPositionVal;
 		},
+
 		// reliableMarginLeft 方法
 		reliableMarginLeft: function() {
+
 			// 执行 computeStyleTests()
 			computeStyleTests();
+
 			// 返回 reliableMarginLeftVal
 			return reliableMarginLeftVal;
 		},
+
 		// scrollboxSize 方法
 		scrollboxSize: function() {
+
 			// 执行 computeStyleTests()
 			computeStyleTests();
+
 			// 返回 scrollboxSizeVal
 			return scrollboxSizeVal;
 		}

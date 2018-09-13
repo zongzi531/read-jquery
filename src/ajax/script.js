@@ -5,6 +5,7 @@ define( [
 ], function( jQuery, document ) {
 
 "use strict";
+
 	// require core.js 获得 jQuery
 	// require var/document.js 获得 window.document
 	// require ajax.js
@@ -13,8 +14,10 @@ define( [
 // 在没有显式数据类型的情况下防止脚本自动执行
 // 执行 jQuery.ajaxPrefilter 方法
 jQuery.ajaxPrefilter( function( s ) {
+
 	// 判断 s.crossDomain
 	if ( s.crossDomain ) {
+
 		// s.contents.script 赋值 false
 		s.contents.script = false;
 	}
@@ -33,8 +36,10 @@ jQuery.ajaxSetup( {
 	},
 	converters: {
 		"text script": function( text ) {
+
 			// 执行 jQuery.globalEval( text )
 			jQuery.globalEval( text );
+
 			// 返回 text
 			return text;
 		}
@@ -45,13 +50,17 @@ jQuery.ajaxSetup( {
 // 处理高速缓存的特殊情况和交叉域
 // 执行 jQuery.ajaxPrefilter 方法
 jQuery.ajaxPrefilter( "script", function( s ) {
+
 	// 判断 s.cache === undefined
 	if ( s.cache === undefined ) {
+
 		// s.cache 赋值 false
 		s.cache = false;
 	}
+
 	// 判断 s.crossDomain
 	if ( s.crossDomain ) {
+
 		// s.type 赋值 "GET"
 		s.type = "GET";
 	}
@@ -66,27 +75,36 @@ jQuery.ajaxTransport( "script", function( s ) {
 	// 此传输仅处理跨域请求。
 	// 判断 s.crossDomain
 	if ( s.crossDomain ) {
+
 		// 初始化 script, callback
 		var script, callback;
+
 		// 返回 对象
 		return {
+
 			// send 方法
 			send: function( _, complete ) {
+
 				// script 赋值
 				// 设置 charset 和 src 属性
 				script = jQuery( "<script>" ).prop( {
 					charset: s.scriptCharset,
 					src: s.url
 				} ).on(
-				 	// 监听 load 和 error
+
+					// 监听 load 和 error
 					"load error",
 					callback = function( evt ) {
+
 						// 执行 script.remove()
 						script.remove();
+
 						// callback 赋值 null
 						callback = null;
+
 						// 判断 evt
 						if ( evt ) {
+
 							// 执行 complete( evt.type === "error" ? 404 : 200, evt.type )
 							complete( evt.type === "error" ? 404 : 200, evt.type );
 						}
@@ -98,10 +116,13 @@ jQuery.ajaxTransport( "script", function( s ) {
 				// 执行 document.head.appendChild( script[ 0 ] )
 				document.head.appendChild( script[ 0 ] );
 			},
+
 			// abort 方法
 			abort: function() {
+
 				// 判断 callback
 				if ( callback ) {
+
 					// 执行 callback()
 					callback();
 				}

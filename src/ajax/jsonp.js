@@ -7,6 +7,7 @@ define( [
 ], function( jQuery, isFunction, nonce, rquery ) {
 
 "use strict";
+
 	// require core.js 获得 jQuery
 	// require var/isFunction.js 获得 isFunction 方法
 	// require ./var/nonce.js 获得 Date.now()
@@ -15,6 +16,7 @@ define( [
 
 // 声明 oldCallbacks 赋值 空数组
 var oldCallbacks = [],
+
 	// 声明 rjsonp 赋值 正则表达式
 	rjsonp = /(=)\?(?=&|$)|\?\?/;
 
@@ -24,10 +26,13 @@ var oldCallbacks = [],
 jQuery.ajaxSetup( {
 	jsonp: "callback",
 	jsonpCallback: function() {
+
 		// 声明 callback 赋值 oldCallbacks.pop() 或者 ( jQuery.expando + "_" + ( nonce++ ) )
 		var callback = oldCallbacks.pop() || ( jQuery.expando + "_" + ( nonce++ ) );
+
 		// 标记 this[ callback ] 为 true
 		this[ callback ] = true;
+
 		// 返回 callback
 		return callback;
 	}
@@ -40,6 +45,7 @@ jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, jqXHR ) {
 
 	// 初始化 callbackName, overwritten, responseContainer
 	var callbackName, overwritten, responseContainer,
+
 		// 声明 jsonProp 赋值 s.jsonp !== false 并且 ( rjsonp.test( s.url ) 返回 为 true 则 赋值 "url"
 		// 否则 赋值 typeof s.data === "string" 并且 ( s.contentType || "" ).indexOf( "application/x-www-form-urlencoded" ) === 0 并且 rjsonp.test( s.data ) && "data"
 		// 这里 有个括号注意下 ( rjsonp.test( s.url ) ? ... : ... )
@@ -67,10 +73,13 @@ jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, jqXHR ) {
 		// 将回调插入 url 或表单数据
 		// 判断 jsonProp
 		if ( jsonProp ) {
+
 			// s[ jsonProp ] 赋值 s[ jsonProp ].replace( rjsonp, "$1" + callbackName )
 			s[ jsonProp ] = s[ jsonProp ].replace( rjsonp, "$1" + callbackName );
+
 			// 判断 s.jsonp !== false
 		} else if ( s.jsonp !== false ) {
+
 			// s.url 赋值 s.url + ( rquery.test( s.url ) ? "&" : "?" ) + s.jsonp + "=" + callbackName
 			s.url += ( rquery.test( s.url ) ? "&" : "?" ) + s.jsonp + "=" + callbackName;
 		}
@@ -79,11 +88,14 @@ jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, jqXHR ) {
 		// 使用数据转换器在脚本执行后检索 json
 		// s.converters[ "script json" ] 赋值 匿名函数
 		s.converters[ "script json" ] = function() {
+
 			// 判断 !responseContainer
 			if ( !responseContainer ) {
+
 				// 执行 jQuery.error( callbackName + " was not called" )
 				jQuery.error( callbackName + " was not called" );
 			}
+
 			// 返回 responseContainer[ 0 ]
 			return responseContainer[ 0 ];
 		};
@@ -97,8 +109,10 @@ jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, jqXHR ) {
 		// 安装回调
 		// overwritten 赋值 window[ callbackName ]
 		overwritten = window[ callbackName ];
+
 		// window[ callbackName ] 赋值 匿名函数
 		window[ callbackName ] = function() {
+
 			// responseContainer 赋值 arguments
 			responseContainer = arguments;
 		};
@@ -112,12 +126,14 @@ jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, jqXHR ) {
 			// 如果先前的值不存在-删除它
 			// 判断 overwritten === undefined
 			if ( overwritten === undefined ) {
+
 				// 执行 jQuery( window ).removeProp( callbackName )
 				jQuery( window ).removeProp( callbackName );
 
 			// Otherwise restore preexisting value
 			// 否则恢复先前存在的值
 			} else {
+
 				// window[ callbackName ] 赋值 overwritten
 				window[ callbackName ] = overwritten;
 			}
@@ -142,6 +158,7 @@ jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, jqXHR ) {
 			// 如果它是一个函数，我们有一个响应
 			// 判断 responseContainer 并且 isFunction( overwritten )
 			if ( responseContainer && isFunction( overwritten ) ) {
+
 				// 执行 overwritten( responseContainer[ 0 ] )
 				overwritten( responseContainer[ 0 ] );
 			}

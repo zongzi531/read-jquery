@@ -13,6 +13,7 @@ define( [
 	};
 
 	function DOMEval( code, doc, node ) {
+
 		// 若doc未传入，默认为 document
 		doc = doc || document;
 
@@ -23,6 +24,7 @@ define( [
 
 		// 将 code 传入 script.text
 		script.text = code;
+
 		// 若 node 存在，将遍历 preservedScriptAttributes 对象
 		// 并对 node 中存在的 对应属性值 赋值到 新声明的 script 标签上
 		if ( node ) {
@@ -32,6 +34,7 @@ define( [
 				}
 			}
 		}
+
 		// 在 head 标签内插入 script 标签，然后移除 script 标签
 		// 为什么要这样做呢？
 		doc.head.appendChild( script ).parentNode.removeChild( script );

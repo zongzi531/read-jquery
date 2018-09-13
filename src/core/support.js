@@ -4,6 +4,7 @@ define( [
 ], function( document, support ) {
 
 "use strict";
+
   // require var/document.js 获得 window.document
   // require var/support.js 获得 空 Object 类型
 
@@ -19,10 +20,13 @@ define( [
 // https://bugs.webkit.org/show_bug.cgi?id=137337
 // createHTMLDocument 直接使用 IIFE 返回 布尔值
 support.createHTMLDocument = ( function() {
+
   // In Safari 8 documents created via document.implementation.createHTMLDocument
 	var body = document.implementation.createHTMLDocument( "" ).body;
+
   // 但是呢为什么这里要使用 <form></form><form></form>？
 	body.innerHTML = "<form></form><form></form>";
+
   // 返回 body.childNodes.length === 2
 	return body.childNodes.length === 2;
 } )();

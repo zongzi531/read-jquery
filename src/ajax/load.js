@@ -10,6 +10,7 @@ define( [
 ], function( jQuery, stripAndCollapse, isFunction ) {
 
 "use strict";
+
 	// require core.js 获得 jQuery
 	// require core/stripAndCollapse.js 获得 stripAndCollapse 方法
 	// require var/isFunction.js 获得 isFunction 方法
@@ -25,17 +26,22 @@ define( [
  */
 // jQuery.fn.load 赋值 匿名函数
 jQuery.fn.load = function( url, params, callback ) {
+
 	// 初始化 selector, type, response
 	var selector, type, response,
+
 		// 声明 self 赋值 this
 		self = this,
+
 		// 声明 off 赋值 url.indexOf( " " )
 		off = url.indexOf( " " );
 
 	// 判断 off > -1
 	if ( off > -1 ) {
+
 		// selector 赋值 stripAndCollapse( url.slice( off ) )
 		selector = stripAndCollapse( url.slice( off ) );
+
 		// url 赋值 url.slice( 0, off )
 		url = url.slice( 0, off );
 	}
@@ -49,6 +55,7 @@ jQuery.fn.load = function( url, params, callback ) {
 		// 我们假设这是回调。
 		// callback 赋值 params
 		callback = params;
+
 		// params 赋值 undefined
 		params = undefined;
 
@@ -56,6 +63,7 @@ jQuery.fn.load = function( url, params, callback ) {
 	// 否则，生成参数字符串
 	// 判断 params 并且 typeof params === "object"
 	} else if ( params && typeof params === "object" ) {
+
 		// type 赋值 "POST"
 		type = "POST";
 	}
@@ -64,6 +72,7 @@ jQuery.fn.load = function( url, params, callback ) {
 	// 如果有要修改的元素，请提出请求
 	// 判断 self.length > 0
 	if ( self.length > 0 ) {
+
 		// 执行 jQuery.ajax
 		jQuery.ajax( {
 			url: url,
@@ -103,8 +112,10 @@ jQuery.fn.load = function( url, params, callback ) {
 		// 如果失败，这个函数会得到 "jqXHR", "status", "error" 。
 		// 链式调用 always 方法 传入 callback 存在 传入 匿名函数
 		} ).always( callback && function( jqXHR, status ) {
+
 			// 执行 self.each 方法
 			self.each( function() {
+
 				// 执行 callback( response 或者 [ jqXHR.responseText, status, jqXHR ] )
 				callback.apply( this, response || [ jqXHR.responseText, status, jqXHR ] );
 			} );

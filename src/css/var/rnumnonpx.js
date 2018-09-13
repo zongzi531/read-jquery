@@ -2,6 +2,7 @@ define( [
 	"../../var/pnum"
 ], function( pnum ) {
 	"use strict";
+
     // require var/pnum.js 获得 ( /[+-]?(?:\d*\.|)\d+(?:[eE][+-]?\d+|)/ ).source
 
   // 返回 正则表达式

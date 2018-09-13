@@ -3,12 +3,14 @@ define( [
 ], function( dataPriv ) {
 
 "use strict";
+
 	// require data/var/dataPriv.js 获得 Data 的实例
 
 // Mark scripts as having already been evaluated
 // Mark scripts 已被评估
 // 声明 setGlobalEval 方法
 function setGlobalEval( elems, refElements ) {
+
 	// 声明 i = 0
 	// 声明 l = 元素集长度
 	var i = 0,
@@ -16,6 +18,7 @@ function setGlobalEval( elems, refElements ) {
 
 	// 遍历元素集
 	for ( ; i < l; i++ ) {
+
 		// 调用 Data 的 set 方法
 		// 其实从这里 我暂时还无法理解 Data 里存的数据是用来做什么的
 		// 第一参数 owner = elems[ i ]

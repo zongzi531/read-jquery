@@ -4,15 +4,19 @@ define( [
 ], function( document, support ) {
 
 "use strict";
+
 	// require var/document.js 获得 window.document
 	// require var/support.js 获得 空 Object 类型
 
 // 执行 IIFE
 ( function() {
+
 	// 声明 input 赋值 document.createElement( "input" )
 	var input = document.createElement( "input" ),
+
 		// 声明 select 赋值 document.createElement( "select" )
 		select = document.createElement( "select" ),
+
 		// 声明 opt 赋值 select.appendChild( document.createElement( "option" ) )
 		opt = select.appendChild( document.createElement( "option" ) );
 
@@ -36,10 +40,13 @@ define( [
 	// 输入变成 radio 后失去其价值
 	// input 赋值 document.createElement( "input" )
 	input = document.createElement( "input" );
+
 	// input.value 赋值 "t"
 	input.value = "t";
+
 	// input.type 赋值 "radio"
 	input.type = "radio";
+
 	// support.radioValue 赋值 input.value === "t"
 	support.radioValue = input.value === "t";
 } )();

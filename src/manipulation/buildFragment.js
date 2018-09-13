@@ -23,6 +23,7 @@ var rhtml = /<|&#?\w+;/;
 
 // 声明 buildFragment 方法
 function buildFragment( elems, context, scripts, selection, ignored ) {
+
 	// 初始化 elem, tmp, tag, wrap, contains, j
 	// 声明 fragment 创建一个新的空白的文档片段( DocumentFragment)
 	// 声明 nodes = 空数组
@@ -36,6 +37,7 @@ function buildFragment( elems, context, scripts, selection, ignored ) {
 
 	// 遍历元素集
 	for ( ; i < l; i++ ) {
+
 		// 获取到当前正在遍历的元素
 		elem = elems[ i ];
 
@@ -57,6 +59,7 @@ function buildFragment( elems, context, scripts, selection, ignored ) {
 			// 将 非HTML 转换为文本节点
 			// 正则表达式 rhtml 检查 elem 返回 false
 			} else if ( !rhtml.test( elem ) ) {
+
 				// 上下文调用 createTextNode 创建新的文本节点
 				// 并将其插入 nodes 数组
 				nodes.push( context.createTextNode( elem ) );
@@ -64,6 +67,7 @@ function buildFragment( elems, context, scripts, selection, ignored ) {
 			// Convert html into DOM nodes
 			// 将HTML转换为DOM节点
 			} else {
+
 				// 检查 tmp 是否存在 若不存在则 创建 div 元素 将其插入 fragment
 				tmp = tmp || fragment.appendChild( context.createElement( "div" ) );
 
@@ -72,8 +76,10 @@ function buildFragment( elems, context, scripts, selection, ignored ) {
 				// 使用 正则表达式 rtagName 进行搜索匹配 返回数组，或者在返回 null 的情况获得 [ "", "" ]
 				// 取 [1] 将其转为小写
 				tag = ( rtagName.exec( elem ) || [ "", "" ] )[ 1 ].toLowerCase();
+
 				// 赋值 wrap 操作 获得 wrapMap[ tag ] 对应值 或者赋值 _default 值
 				wrap = wrapMap[ tag ] || wrapMap._default;
+
 				// 为 tmp 元素 设置 innerHTML 值 ，获取 wrap[ 1 ] （标签头）和 wrap[ 2 ] （标签尾）
 				// jQuery.htmlPrefilter( elem ) 看起来是取标签中间那部分的
 				// 印象里好像还没读到这个方法
@@ -84,8 +90,10 @@ function buildFragment( elems, context, scripts, selection, ignored ) {
 				// 赋值 j
 				// 按照 wrap来看，0 号位置是用来存放 后面标签层数的
 				j = wrap[ 0 ];
+
 				// 遍历 j
 				while ( j-- ) {
+
 					// tmp 重新赋值 lastChild 值
 					// lastChild: 返回当前节点的最后一个子节点
 					tmp = tmp.lastChild;
@@ -114,6 +122,7 @@ function buildFragment( elems, context, scripts, selection, ignored ) {
 
 	// 重置 i = 0
 	i = 0;
+
 	// 这样看起来上面那段遍历代码是在向 nodes 中插入元素
 	// 然后这里拿出来
 	// 遍历 nodes 数组
@@ -123,11 +132,14 @@ function buildFragment( elems, context, scripts, selection, ignored ) {
 		// 跳过上下文集合中的元素
 		// selection 存在 且 selection 存在在 elem 中
 		if ( selection && jQuery.inArray( elem, selection ) > -1 ) {
+
 			// ignored 存在
 			if ( ignored ) {
+
 				// 向 ignored 加入 elem
 				ignored.push( elem );
 			}
+
 			// 跳过此次，执行下一次循环
 			continue;
 		}
@@ -147,6 +159,7 @@ function buildFragment( elems, context, scripts, selection, ignored ) {
 		// 保存脚本评估历史
 		// 若 contains 为真
 		if ( contains ) {
+
 			// 执行 setGlobalEval 方法
 			// 在干嘛 我也不知道
 			// 看起来像是设置 当前所有者对象缓存 设置什么值
@@ -157,12 +170,16 @@ function buildFragment( elems, context, scripts, selection, ignored ) {
 		// 捕获可执行文件
 		// 若 scripts 为真
 		if ( scripts ) {
+
 			// 设置 j = 0
 			j = 0;
+
 			// 遍历 tmp script 标签数组
 			while ( ( elem = tmp[ j++ ] ) ) {
+
 				// 检测 script 标签
 				if ( rscriptType.test( elem.type || "" ) ) {
+
 					// 将当前 elem 加入 scripts 数组
 					scripts.push( elem );
 				}

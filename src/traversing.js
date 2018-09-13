@@ -12,6 +12,7 @@ define( [
 ], function( jQuery, indexOf, dir, siblings, rneedsContext, nodeName ) {
 
 "use strict";
+
 	// require core.js 获得 jQuery
 	// require var/indexOf.js 获得 Array.prototype.indexOf 方法
 	// require traversing/var/dir.js 获得 dir 方法
@@ -37,10 +38,13 @@ var rparentsprev = /^(?:parents|prev(?:Until|All))/,
 
 // 执行 jQuery.fn.extend 方法
 jQuery.fn.extend( {
+
 	// has 方法
 	has: function( target ) {
+
 		// 声明 targets 为 jQuery( target, this )
 		var targets = jQuery( target, this ),
+
 			// 声明 l 为 targets 长度
 			l = targets.length;
 
@@ -48,10 +52,13 @@ jQuery.fn.extend( {
 		// 一个函数用作测试集合中的每个元素。this 是当前DOM元素。
 		// 遍历当前DOM元素，在每次遍历中继续进行遍历
 		return this.filter( function() {
+
 			// 声明 i = 0
 			var i = 0;
+
 			// 遍历 targets 长度
 			for ( ; i < l; i++ ) {
+
 				// 使用 jQuery.contains 方法进行检查
 				// 若返回真 则返回真
 				// filter function 参数的返回值
@@ -64,14 +71,19 @@ jQuery.fn.extend( {
 
 	// closest 方法
 	closest: function( selectors, context ) {
+
 		// 初始化 cur
 		var cur,
+
 			// 声明 i = 0
 			i = 0,
+
 			// 声明 l = 当前元素集的长度
 			l = this.length,
+
 			// 声明 matched = []
 			matched = [],
+
 			// 声明 若 selectors 不为 String 类型 则返回 jQuery( selectors ) 否则返回 false
 			targets = typeof selectors !== "string" && jQuery( selectors );
 
@@ -79,8 +91,10 @@ jQuery.fn.extend( {
 		// 位置选择器永远不匹配，因为没有选择上下文。
 		// 若 rneedsContext.test( selectors ) 返回 false 进入判断
 		if ( !rneedsContext.test( selectors ) ) {
+
 			// 遍历当前元素集的长度
 			for ( ; i < l; i++ ) {
+
 				// 继续遍历 一直往 parentNode 遍历
 				// 将 当前遍历的元素 赋值给 cur
 				// 判断条件为若 cur 存在 并且 cur !== context 满足遍历条件
@@ -103,6 +117,7 @@ jQuery.fn.extend( {
 
 						// matched 加入 cur
 						matched.push( cur );
+
 						// 退出当前循环
 						break;
 					}
@@ -127,6 +142,7 @@ jQuery.fn.extend( {
 		// 无参数，父级返回索引
 		// 若 elem 不存在就是 无参
 		if ( !elem ) {
+
 			// 返回 若 当前元素集第一个元素 存在 并且 当前元素集第一个元素的父元素 存在
 			// 调用 first 描述: 获取匹配元素集合中第一个元素。
 			// 调用 prevAll 描述: 获得集合中每个匹配元素的所有前面的兄弟元素，选择性筛选的选择器。
@@ -138,6 +154,7 @@ jQuery.fn.extend( {
 		// 选择器中的索引
 		// 若 elem 为 String 类型
 		if ( typeof elem === "string" ) {
+
 			// 返回 jQuery( elem ).indexOf(this[ 0 ])
 			return indexOf.call( jQuery( elem ), this[ 0 ] );
 		}
@@ -154,10 +171,13 @@ jQuery.fn.extend( {
 
 	// add 方法
 	add: function( selector, context ) {
+
 		// 返回调用 pushStack 方法
 		return this.pushStack(
+
 			// 恰当的除去重复项。
 			jQuery.uniqueSort(
+
 				// 合并 当前元素集 和 新的元素集
 				jQuery.merge( this.get(), jQuery( selector, context ) )
 			)
@@ -167,6 +187,7 @@ jQuery.fn.extend( {
 	// addBack 方法
 	// 撤销 add
 	addBack: function( selector ) {
+
 		// 返回 add 方法 若 selector == null 则直接传入 this.prevObject
 		// 反之 返回 this.prevObject 筛选 selector
 		// 重新调用 add 方法
@@ -178,68 +199,87 @@ jQuery.fn.extend( {
 
 // sibling 方法
 function sibling( cur, dir ) {
+
 	// 遍历 cur [ dir ]
 	// 一直往下获取
 	while ( ( cur = cur[ dir ] ) && cur.nodeType !== 1 ) {}
+
 	// 返回 cur
 	return cur;
 }
 
 // 调用 jQuery.each 遍历下面对象
 jQuery.each( {
+
 	// parent 方法
 	parent: function( elem ) {
+
 		// 声明 parent 为 elem 的父节点
 		var parent = elem.parentNode;
+
 		// 返回 若 parent 存在并且 parent.nodeType !== 11 则返回 parent 否则返回 null
 		return parent && parent.nodeType !== 11 ? parent : null;
 	},
+
 	// parents 方法
 	parents: function( elem ) {
+
 		// 返回 调用 dir 方法
 		return dir( elem, "parentNode" );
 	},
+
 	// parentsUntil 方法
 	parentsUntil: function( elem, i, until ) {
 		return dir( elem, "parentNode", until );
 	},
+
 	// next 方法
 	next: function( elem ) {
 		return sibling( elem, "nextSibling" );
 	},
+
 	// prev 方法
 	prev: function( elem ) {
 		return sibling( elem, "previousSibling" );
 	},
+
 	// nextAll 方法
 	nextAll: function( elem ) {
 		return dir( elem, "nextSibling" );
 	},
+
 	// prevAll 方法
 	prevAll: function( elem ) {
 		return dir( elem, "previousSibling" );
 	},
+
 	// nextUntil 方法
 	nextUntil: function( elem, i, until ) {
 		return dir( elem, "nextSibling", until );
 	},
+
 	// prevUntil 方法
 	prevUntil: function( elem, i, until ) {
 		return dir( elem, "previousSibling", until );
 	},
+
 	// siblings 方法
 	siblings: function( elem ) {
 		return siblings( ( elem.parentNode || {} ).firstChild, elem );
 	},
+
 	// children 方法
 	children: function( elem ) {
 		return siblings( elem.firstChild );
 	},
+
 	// contents 方法
 	contents: function( elem ) {
+
 				// 若 nodeName 是 iframe
         if ( nodeName( elem, "iframe" ) ) {
-        		// 返回 elem.contentDocument
+
+            // 返回 elem.contentDocument
             return elem.contentDocument;
         }
 
@@ -248,29 +288,35 @@ jQuery.each( {
         // don't support it.
         // 若 nodeName 是 template
         if ( nodeName( elem, "template" ) ) {
-        		// 检查 elem 是否存在 content 属性 若存在赋值 elem.content
+
+            // 检查 elem 是否存在 content 属性 若存在赋值 elem.content
             elem = elem.content || elem;
         }
 
         // 返回 elem.childNodes
         return jQuery.merge( [], elem.childNodes );
 	}
+
 	// 回调函数
 }, function( name, fn ) {
+
 	// 为 jQuery.fn[ name ] 设置方法
 	jQuery.fn[ name ] = function( until, selector ) {
+
 		// 调用 jQuery.map fn 以回调形式传入
 		// 声明 matched 赋值返回数组
 		var matched = jQuery.map( this, fn, until );
 
 		// 若 name 的后五位开始算 不是 Until 的话
 		if ( name.slice( -5 ) !== "Until" ) {
+
 			// selector = until
 			selector = until;
 		}
 
 		// 若 selector 存在 并且 selector 为 String 类型
 		if ( selector && typeof selector === "string" ) {
+
 			// matched = 按照 selector 筛选 出来的 matched
 			matched = jQuery.filter( selector, matched );
 		}
@@ -282,6 +328,7 @@ jQuery.each( {
 			// 删除重复
 			// 若 guaranteedUnique[ name ] 返回 为 false
 			if ( !guaranteedUnique[ name ] ) {
+
 				// 执行 jQuery.uniqueSort( matched )
 				jQuery.uniqueSort( matched );
 			}
@@ -290,6 +337,7 @@ jQuery.each( {
 			// parents* 和 prev-derivatives 的反序
 			// 若 rparentsprev 正则表达式校验通过
 			if ( rparentsprev.test( name ) ) {
+
 				// 调用 Array.prototype.reverse()
 				matched.reverse();
 			}

@@ -20,7 +20,7 @@ var readyList = jQuery.Deferred();
 // 设置 jQuery.fn.ready 插入 callback 函数
 jQuery.fn.ready = function( fn ) {
 
- 	// 调用 readyList 方法 传入 fn 参数
+  // 调用 readyList 方法 传入 fn 参数
 	readyList
 		.then( fn )
 
@@ -29,6 +29,7 @@ jQuery.fn.ready = function( fn ) {
 		// registration.
 		// 在函数中包装 jQuery.readyException ，以便在错误处理时发生查找，而不是回调注册。
 		.catch( function( error ) {
+
 			// 捕获报错
 			// 调用 jQuery.readyException 方法
 			jQuery.readyException( error );

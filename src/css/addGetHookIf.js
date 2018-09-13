@@ -9,8 +9,10 @@ function addGetHookIf( conditionFn, hookFn ) {
 	// 定义钩子，如果需要，我们会检查第一次运行。
 	// 返回 对象
 	return {
+
 		// get 方法
 		get: function() {
+
 			// 判断 conditionFn()
 			if ( conditionFn() ) {
 

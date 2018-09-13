@@ -8,6 +8,7 @@ define( [
   // require var/class2type.js 获得 空 Object 类型
   // require var/toString.js 获得 Object.prototype.toString 方法
 function toType( obj ) {
+
   // 若 obj == null 则将obj转换为 String 类型返回
   // ==: Abstract Equality 抽象平等
 	if ( obj == null ) {
@@ -30,23 +31,3 @@ function toType( obj ) {
   // 返回 toType 方法
 return toType;
 } );
-
-// define( [
-//   "../var/class2type",
-//   "../var/toString"
-// ], function( class2type, toString ) {
-//   "use strict";
-
-//   function toType( obj ) {
-//     if ( obj == null ) {
-//       return obj + "";
-//     }
-
-//     // Support: Android <=2.3 only (functionish RegExp)
-//     return typeof obj === "object" || typeof obj === "function" ?
-//       class2type[ toString.call( obj ) ] || "object" :
-//       typeof obj;
-//   }
-
-//   return toType;
-// } );

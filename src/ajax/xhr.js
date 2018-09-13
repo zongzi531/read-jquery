@@ -5,6 +5,7 @@ define( [
 ], function( jQuery, support ) {
 
 "use strict";
+
 	// require core.js 获得 jQuery
 	// require var/support.js 获得 support 对象
 	// require ajax.js
@@ -12,6 +13,7 @@ define( [
 // jQuery.ajaxSettings.xhr 赋值 匿名函数
 jQuery.ajaxSettings.xhr = function() {
 	try {
+
 		// 尝试 返回 new window.XMLHttpRequest() 若报错则忽略
 		return new window.XMLHttpRequest();
 	} catch ( e ) {}
@@ -29,16 +31,19 @@ var xhrSuccessStatus = {
 		// 有时 IE 返回 1223，这应该是 204。
 		1223: 204
 	},
+
 	// 声明 xhrSupported 赋值 jQuery.ajaxSettings.xhr()
 	xhrSupported = jQuery.ajaxSettings.xhr();
 
 // support.cors 赋值 !!xhrSupported && ( "withCredentials" in xhrSupported )
 support.cors = !!xhrSupported && ( "withCredentials" in xhrSupported );
+
 // support.ajax 赋值 xhrSupported = !!xhrSupported
 support.ajax = xhrSupported = !!xhrSupported;
 
 // 执行 jQuery.ajaxTransport 方法
 jQuery.ajaxTransport( function( options ) {
+
 	// 初始化 callback, errorCallback
 	var callback, errorCallback;
 
@@ -46,13 +51,17 @@ jQuery.ajaxTransport( function( options ) {
 	// 只有通过 XMLHttpRequest 支持才允许跨域。
 	// 判断 support.cors 或者 xhrSupported 并且 !options.crossDomain
 	if ( support.cors || xhrSupported && !options.crossDomain ) {
+
 		// 返回 对象
 		return {
+
 			// send 方法
 			send: function( headers, complete ) {
+
 				// 这里开始就是 XMLHttpRequest 方法的实现，具体步骤可以参阅MDN
 				// 初始化 i
 				var i,
+
 					// 声明 xhr 赋值 options.xhr()
 					xhr = options.xhr();
 
@@ -69,8 +78,10 @@ jQuery.ajaxTransport( function( options ) {
 				// 如果提供自定义字段
 				// 判断 options.xhrFields
 				if ( options.xhrFields ) {
+
 					// 遍历 options.xhrFields 属性
 					for ( i in options.xhrFields ) {
+
 						// xhr[ i ] 赋值 options.xhrFields[ i ]
 						xhr[ i ] = options.xhrFields[ i ];
 					}
@@ -80,6 +91,7 @@ jQuery.ajaxTransport( function( options ) {
 				// 如果需要，重写MIME类型
 				// 判断 options.mimeType 并且 xhr.overrideMimeType
 				if ( options.mimeType && xhr.overrideMimeType ) {
+
 					// 执行 xhr.overrideMimeType( options.mimeType )
 					xhr.overrideMimeType( options.mimeType );
 				}
@@ -95,6 +107,7 @@ jQuery.ajaxTransport( function( options ) {
 				// 对于相同的域请求，如果已经提供，则不会更改头。
 				// 判断 !options.crossDomain 并且 !headers[ "X-Requested-With" ]
 				if ( !options.crossDomain && !headers[ "X-Requested-With" ] ) {
+
 					// headers[ "X-Requested-With" ] 赋值 "XMLHttpRequest"
 					headers[ "X-Requested-With" ] = "XMLHttpRequest";
 				}
@@ -103,6 +116,7 @@ jQuery.ajaxTransport( function( options ) {
 				// 设置头部
 				// 遍历 headers
 				for ( i in headers ) {
+
 					// 执行 xhr.setRequestHeader( i, headers[ i ] )
 					xhr.setRequestHeader( i, headers[ i ] );
 				}
@@ -111,10 +125,13 @@ jQuery.ajaxTransport( function( options ) {
 				// 回调
 				// callback 赋值匿名函数
 				callback = function( type ) {
+
 					// 返回 匿名函数
 					return function() {
+
 						// 判断 callback
 						if ( callback ) {
+
 							// callback 和 errorCallback 和 xhr.onload 和 xhr.onerror 和 xhr.onabort 和 xhr.ontimeout 和 xhr.onreadystatechange 赋值 null
 							callback = errorCallback = xhr.onload =
 								xhr.onerror = xhr.onabort = xhr.ontimeout =
@@ -122,8 +139,10 @@ jQuery.ajaxTransport( function( options ) {
 
 							// 判断 type === "abort"
 							if ( type === "abort" ) {
+
 								// 执行 xhr.abort()
 								xhr.abort();
+
 								// 判断 type === "error"
 							} else if ( type === "error" ) {
 
@@ -133,9 +152,11 @@ jQuery.ajaxTransport( function( options ) {
 								// 在手动本地中止中，IE9在不处于就绪状态的任何属性访问中引发错误。
 								// 判断 typeof xhr.status !== "number"
 								if ( typeof xhr.status !== "number" ) {
+
 									// 执行 complete( 0, "error" )
 									complete( 0, "error" );
 								} else {
+
 									// 执行 complete(xhr.status, xhr.statusText)
 									complete(
 
@@ -146,8 +167,10 @@ jQuery.ajaxTransport( function( options ) {
 									);
 								}
 							} else {
+
 								// 执行 complete 方法
 								complete(
+
 									// xhrSuccessStatus[ xhr.status ] 或 xhr.status,
 									xhrSuccessStatus[ xhr.status ] || xhr.status,
 									xhr.statusText,
@@ -175,6 +198,7 @@ jQuery.ajaxTransport( function( options ) {
 				// 倾听事件
 				// xhr.onload 赋值 callback()
 				xhr.onload = callback();
+
 				// errorCallback 和 xhr.onerror 和 xhr.ontimeout 赋值 callback( "error" )
 				errorCallback = xhr.onerror = xhr.ontimeout = callback( "error" );
 
@@ -184,9 +208,11 @@ jQuery.ajaxTransport( function( options ) {
 				// 用 onreadystatechange 代替 onabort 处理未中止的事件
 				// 判断 xhr.onabort !== undefined
 				if ( xhr.onabort !== undefined ) {
+
 					// xhr.onabort 赋值 errorCallback
 					xhr.onabort = errorCallback;
 				} else {
+
 					// xhr.onreadystatechange 赋值 匿名函数
 					xhr.onreadystatechange = function() {
 
@@ -203,8 +229,10 @@ jQuery.ajaxTransport( function( options ) {
 							// 此外，将 errorCallback 保存到无法访问的 xhr.onerror 变量
 							// 调用 window.setTimeout 方法
 							window.setTimeout( function() {
+
 								// 判断 callback
 								if ( callback ) {
+
 									// 执行 errorCallback()
 									errorCallback();
 								}
@@ -230,6 +258,7 @@ jQuery.ajaxTransport( function( options ) {
 					// 如果未被通知为错误，则仅重新抛出
 					// 判断 callback
 					if ( callback ) {
+
 						// 抛出错误 e
 						throw e;
 					}
@@ -238,8 +267,10 @@ jQuery.ajaxTransport( function( options ) {
 
 			// abort 方法
 			abort: function() {
+
 				// 判断 callback
 				if ( callback ) {
+
 					// 执行 callback()
 					callback();
 				}

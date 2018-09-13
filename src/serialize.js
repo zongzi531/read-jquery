@@ -9,6 +9,7 @@ define( [
 ], function( jQuery, toType, rcheckableType, isFunction ) {
 
 "use strict";
+
 	// require core.js 获得 jQuery
 	// require core/toType.js 获得 toType 方法
 	// require manipulation/var/rcheckableType.js 获得 用来检查 checkbox 或者 radio 的正则表达式
@@ -18,17 +19,22 @@ define( [
 	// require attributes/prop.js
 
 var
+
 	// 声明 rbracket 正则表达式
 	rbracket = /\[\]$/,
+
 	// 声明 rCRLF 正则表达式
 	rCRLF = /\r?\n/g,
+
 	// 声明 rsubmitterTypes 正则表达式 用于判断 submit|button|image|reset|file
 	rsubmitterTypes = /^(?:submit|button|image|reset|file)$/i,
+
 	// 声明 rsubmittable 正则表达式 用于判断 input|select|textarea|keygen
 	rsubmittable = /^(?:input|select|textarea|keygen)/i;
 
 // 声明 buildParams 方法
 function buildParams( prefix, obj, traditional, add ) {
+
 	// 初始化 name
 	var name;
 
@@ -39,6 +45,7 @@ function buildParams( prefix, obj, traditional, add ) {
 		// Serialize 数组 项目
 		// 使用 jQuery.each 方法 遍历 obj
 		jQuery.each( obj, function( i, v ) {
+
 			// 判断 traditional 或者 rbracket.test( prefix )
 			if ( traditional || rbracket.test( prefix ) ) {
 
@@ -67,6 +74,7 @@ function buildParams( prefix, obj, traditional, add ) {
 		// Serialize 对象 项目
 		// 使用 in 操作符 遍历 obj
 		for ( name in obj ) {
+
 			// 递归调用
 			buildParams( prefix + "[" + name + "]", obj[ name ], traditional, add );
 		}
@@ -84,10 +92,13 @@ function buildParams( prefix, obj, traditional, add ) {
 // 将表单元素数组或一组键值/值序列化为查询字符串
 // jQuery.param 赋值 匿名函数
 jQuery.param = function( a, traditional ) {
+
 	// 初始化 prefix
 	var prefix,
+
 		// 声明 s 赋值 []
 		s = [],
+
 		// 声明 add 赋值 方法
 		add = function( key, valueOrFunction ) {
 
@@ -134,13 +145,17 @@ jQuery.param = function( a, traditional ) {
 
 // jQuery.fn.extend 方法
 jQuery.fn.extend( {
+
 	// serialize 方法
 	serialize: function() {
+
 		// 返回 jQuery.param( this.serializeArray() )
 		return jQuery.param( this.serializeArray() );
 	},
+
 	// serializeArray 方法
 	serializeArray: function() {
+
 		// 方法 map 方法
 		return this.map( function() {
 
@@ -148,11 +163,14 @@ jQuery.fn.extend( {
 			// 可以为“元素”添加 propHook 来过滤或添加表单元素
 			// 声明 elements 赋值 jQuery.prop( this, "elements" )
 			var elements = jQuery.prop( this, "elements" );
+
 			// 返回 elements ? jQuery.makeArray( elements ) : this
 			return elements ? jQuery.makeArray( elements ) : this;
 		} )
+
 		// 链式调用 filter 方法
 		.filter( function() {
+
 			// 声明 type 赋值 this.type
 			var type = this.type;
 
@@ -165,8 +183,10 @@ jQuery.fn.extend( {
 				rsubmittable.test( this.nodeName ) && !rsubmitterTypes.test( type ) &&
 				( this.checked || !rcheckableType.test( type ) );
 		} )
+
 		// 链式调用 map 方法
 		.map( function( i, elem ) {
+
 			// 声明 val 赋值 jQuery( this ).val()
 			var val = jQuery( this ).val();
 
@@ -177,8 +197,10 @@ jQuery.fn.extend( {
 
 			// 判断 val 是否为数组
 			if ( Array.isArray( val ) ) {
+
 				// 返回 对 val 使用 jQuery.map 方法
 				return jQuery.map( val, function( val ) {
+
 					// 返回 { name: elem.name, value: val.replace( rCRLF, "\r\n" ) }
 					return { name: elem.name, value: val.replace( rCRLF, "\r\n" ) };
 				} );
@@ -186,6 +208,7 @@ jQuery.fn.extend( {
 
 			// 返回  name: elem.name, value: val.replace( rCRLF, "\r\n" ) }
 			return { name: elem.name, value: val.replace( rCRLF, "\r\n" ) };
+
 		// 链式调用 get 方法
 		} ).get();
 	}

@@ -11,10 +11,12 @@ define( [
 	// require var/isFunction.js 获得 isFunction 方法
 	// 声明 readyCallbacks 为空数组
 var readyCallbacks = [],
+
 	// 声明 whenReady 为向 readyCallbacks 添加 callback 函数
 	whenReady = function( fn ) {
 		readyCallbacks.push( fn );
 	},
+
 	// 声明 executeReady 执行 callback 函数
 	executeReady = function( fn ) {
 
@@ -23,6 +25,7 @@ var readyCallbacks = [],
 		// Not backwards-compatible as this does not execute sync
 		// 不向后兼容，因为这不执行同步。
 		window.setTimeout( function() {
+
 			// 为 fn 绑定 this 指向至 document
 			// 传入 jQuery 对象
 			fn.call( document, jQuery );
@@ -73,15 +76,19 @@ jQuery.extend( {
 
 		// 重新赋值 whenReady 方法
 		whenReady = function( fn ) {
+
 			// 向 readyCallbacks 添加 callback 函数
 			readyCallbacks.push( fn );
 
 			// 遍历 readyCallbacks
 			while ( readyCallbacks.length ) {
+
 				// 获取 readyCallbacks 第一个 fn
 				fn = readyCallbacks.shift();
+
 				// 若 fn 是 function
 				if ( isFunction( fn ) ) {
+
 					// 执行 executeReady
 					executeReady( fn );
 				}

@@ -133,12 +133,14 @@ jQuery.fn = jQuery.prototype = {
 	// 为匹配的集合中的每个元素执行回调
 	// 描述: 遍历一个jQuery对象，为每个匹配元素执行一个函数。
 	each: function( callback ) {
+
 		// 返回 each方法 传入当前元素集和回调函数
 		return jQuery.each( this, callback );
 	},
 
 	// 描述: 通过一个函数匹配当前集合中的每个元素,产生一个包含新的jQuery对象。
 	map: function( callback ) {
+
 		// jQuery.map 传入当前元素集和回调函数
 		// 返回出来的新数组再调用 pushStack 方法
 		// 将旧的元素集赋值到 ret.prevObject
@@ -155,6 +157,7 @@ jQuery.fn = jQuery.prototype = {
 
 	// 描述: 根据指定的下标范围，过滤匹配的元素集合，并生成一个新的 jQuery 对象。
 	slice: function() {
+
 		// 对 this 当前元素集 执行 Array.prototype.slice()
 		// 返回出来的新数组再调用 pushStack 方法
 		// 将旧的元素集赋值到 ret.prevObject
@@ -163,12 +166,14 @@ jQuery.fn = jQuery.prototype = {
 
 	// 描述: 获取匹配元素集合中第一个元素。
 	first: function() {
+
 		// 返回 当前元素集第一个元素
 		return this.eq( 0 );
 	},
 
 	// 描述: 获取匹配元素集合中最后一个元素。
 	last: function() {
+
 		// 返回 当前元素集最后一个元素
 		return this.eq( -1 );
 	},
@@ -176,11 +181,13 @@ jQuery.fn = jQuery.prototype = {
 	// eq 方法
 	// 描述: 减少匹配元素的集合为指定的索引的哪一个元素。
 	eq: function( i ) {
+
 		// 声明 len 并将 this 当前元素集的长度 进行赋值
 		// 声明 j 取 i 值， 利用 +i 将 i 转换为 Number 类型
 		// 同样，若 i < 0 则 反向取正
 		var len = this.length,
 			j = +i + ( i < 0 ? len : 0 );
+
 		// 三元表达式程序安全性校验 保证 j >= 0 && j < len 取 当前元素集对应元素
 		// 否则返回 空 数组
 		// 返回出来的新数组再调用 pushStack 方法
@@ -191,6 +198,7 @@ jQuery.fn = jQuery.prototype = {
 	// end 方法
 	// 描述: 终止在当前链的最新过滤操作，并返回匹配的元素的以前状态。
 	end: function() {
+
 		// 返回当前元素集的 prevObject 属性值 或者 构造器
 		return this.prevObject || this.constructor();
 	},
@@ -201,8 +209,10 @@ jQuery.fn = jQuery.prototype = {
   // 行为类似于数组的方法，而不是像jQuery方法那样
   // Array.prototype.push 方法
 	push: push,
+
 	// Array.prototype.sort 方法
 	sort: arr.sort,
+
 	// Array.prototype.splice 方法
 	splice: arr.splice
 };
@@ -213,6 +223,7 @@ jQuery.fn = jQuery.prototype = {
 // jQuery.fn.extend
 // 描述: 一个对象的内容合并到jQuery的原型，以提供新的jQuery实例方法。
 jQuery.extend = jQuery.fn.extend = function() {
+
 	// 初始化 options, name, src, copy, copyIsArray, clone,
 	// 声明 target 为 arguments[ 0 ]，若不存在则为 空 对象
 	// 声明 i = 1
@@ -228,6 +239,7 @@ jQuery.extend = jQuery.fn.extend = function() {
 	// 处理深度拷贝的情况
 	// 若 arguments[ 0 ] 为布尔值
 	if ( typeof target === "boolean" ) {
+
 		// deep 赋值 target
 		deep = target;
 
@@ -251,8 +263,10 @@ jQuery.extend = jQuery.fn.extend = function() {
 	// 如果仅传递一个参数，则扩展jQuery本身
 	// i 值没有改变的情况下就是 1
 	if ( i === length ) {
+
 		// target = jQuery 本身
 		target = this;
+
 		// i 值在之后为 0
 		// 用于后续遍历
 		i--;
@@ -270,6 +284,7 @@ jQuery.extend = jQuery.fn.extend = function() {
 			// 扩展基本对象
 			// 使用 in 操作符遍历 options 对象
 			for ( name in options ) {
+
 				// src 为目标 target[ name ] 对应的值
 				// copy 为拷贝 options[ name ] 对应的值
 				src = target[ name ];
@@ -291,13 +306,16 @@ jQuery.extend = jQuery.fn.extend = function() {
 
 					// 如果 copyIsArray 为 true
 					if ( copyIsArray ) {
+
 						// 重置 copyIsArray 为 false
 						copyIsArray = false;
+
 						// 判断 src 是否存在，src 是否为数组
 						// 若满足以上则返回 src，否则返回 空 数组
 						clone = src && Array.isArray( src ) ? src : [];
 
 					} else {
+
 						// copyIsArray 为 false 的情况
 						// 判断 src 是否存在，src 是否为纯粹的对象
 						// 若满足以上则返回 src，否则返回 空 对象
@@ -350,6 +368,7 @@ jQuery.extend( {
 
 	// 描述: 测试对象是否是纯粹的对象（通过 "{}" 或者 "new Object" 创建的）
 	isPlainObject: function( obj ) {
+
 		// 初始化proto, Ctor
 		var proto, Ctor;
 
@@ -396,6 +415,7 @@ jQuery.extend( {
 		for ( name in obj ) {
 			return false;
 		}
+
 		// 没有属性 返回 true
 		return true;
 	},
@@ -403,6 +423,7 @@ jQuery.extend( {
 	// Evaluates a script in a global context
 	// 描述: 在全局上下文下执行一些JavaScript代码。
 	globalEval: function( code ) {
+
 		// 执行JavaScript代码
 		DOMEval( code );
 	},
@@ -410,15 +431,19 @@ jQuery.extend( {
 	// each 方法
 	// 描述: 一个通用的迭代函数，它可以用来无缝迭代对象和数组。数组和类似数组的对象通过一个长度属性（如一个函数的参数对象）来迭代数字索引，从0到length - 1。其他对象通过其属性名进行迭代。
 	each: function( obj, callback ) {
+
 		// 初始化 length 和 i = 0
 		var length, i = 0;
 
 		// 判断 obj 是否为一个类似数组的对象
 		if ( isArrayLike( obj ) ) {
+
 			// 赋值 obj.length
 			length = obj.length;
+
 			// 遍历 length
 			for ( ; i < length; i++ ) {
+
 				// callback 接受两个参数 i, obj[ i ]
 				// 若有一次 callback 返回 false 则 break 退出此次遍历
 				if ( callback.call( obj[ i ], i, obj[ i ] ) === false ) {
@@ -426,6 +451,7 @@ jQuery.extend( {
 				}
 			}
 		} else {
+
 			// 认为 obj 为对象，使用 in 操作符进行遍历
 			for ( i in obj ) {
 				if ( callback.call( obj[ i ], i, obj[ i ] ) === false ) {
@@ -441,6 +467,7 @@ jQuery.extend( {
 	// Support: Android <=4.0 only
 	// 描述: 去掉字符串起始和结尾的空格。
 	trim: function( text ) {
+
 		// 若 text == null 则返回 空 String 类型
 		// 反之，text + "" 将 text 转为 String 类型 使用 String.prototype.replace() 去将一些 满足正则表达式的字符串替换为空字符串
 		return text == null ?
@@ -451,11 +478,13 @@ jQuery.extend( {
 	// results is for internal usage only
 	// 描述: 转换一个类似数组的对象成为真正的JavaScript数组。
 	makeArray: function( arr, results ) {
+
 		// 初始化 ret 若参数 results 不存在则初始化为 空数组
 		var ret = results || [];
 
 		// 判断 arr != null
 		if ( arr != null ) {
+
 			// 不是很看得懂 为什么要 Object( arr )
 			// 判断 arr 是否为 数组对象
 			// 满足的话调用jQuery.merge
@@ -467,6 +496,7 @@ jQuery.extend( {
 					[ arr ] : arr
 				);
 			} else {
+
 				// 否则直接使用ret.push(arr)
 				push.call( ret, arr );
 			}
@@ -477,6 +507,7 @@ jQuery.extend( {
 
 	// 描述: 在数组中查找指定值并返回它的索引（如果没有找到，则返回-1）。
 	inArray: function( elem, arr, i ) {
+
 		// 若 arr == null 返回 -1
 		// 否则调用 Array.prototype.indexOf 方法
 		// arr.indexOf(elem, i)
@@ -489,6 +520,7 @@ jQuery.extend( {
 	// 合并方法
 	// 功能等同于ES 6的 [...first, ...second]
 	merge: function( first, second ) {
+
 		// 声明 len 获取 second 的长度，这个 + 号有点意思，利用JS的特性对 second.length 隐式转换成 Number 类型
 		// 初始化 j = 0
 		// 声明 i 为 first 的长度
@@ -512,6 +544,7 @@ jQuery.extend( {
 
 	// 描述: 查找满足过滤函数的数组元素。原始数组不受影响。
 	grep: function( elems, callback, invert ) {
+
 		// 初始化 callbackInverse
 		// 声明 matches 为 空数组
 		// 声明 i = 0
@@ -529,8 +562,10 @@ jQuery.extend( {
 		// 通过验证程序功能
 		// 遍历元素集
 		for ( ; i < length; i++ ) {
+
 			// callbackInverse = 回调返回取反
 			callbackInverse = !callback( elems[ i ], i );
+
 			// 若 callbackInverse !== callbackExpect
 			// 匹配数组 push 该元素
 			if ( callbackInverse !== callbackExpect ) {
@@ -546,6 +581,7 @@ jQuery.extend( {
 	// arg 仅用于内部使用。
 	// 描述: 将一个数组中的所有元素转换到另一个数组中。
 	map: function( elems, callback, arg ) {
+
 		// 初始化 length, value, i = 0, ret = []
 		var length, value,
 			i = 0,
@@ -555,14 +591,18 @@ jQuery.extend( {
 		// 遍历数组，将每个项转换为新值
 		// 判断 elems 是否为一个类似数组的对象
 		if ( isArrayLike( elems ) ) {
+
 			// 获取 elems 的长度
 			length = elems.length;
+
 			// 遍历 elems
 			for ( ; i < length; i++ ) {
+
 				// 将 elems[ i ], i, arg 传入回调函数，并执行返回赋值至 value
 				value = callback( elems[ i ], i, arg );
 
 				if ( value != null ) {
+
 					// 只要 value != null，将 value 添加至 ret
 					ret.push( value );
 				}
@@ -571,6 +611,7 @@ jQuery.extend( {
 		// Go through every key on the object,
 		// 检查对象上的每个键
 		} else {
+
 			// 认为 elems 为对象，使用 in 操作符进行遍历
 			for ( i in elems ) {
 				value = callback( elems[ i ], i, arg );
@@ -600,6 +641,7 @@ jQuery.extend( {
 
 // 判断是否存在 Symbol 数据类型
 if ( typeof Symbol === "function" ) {
+
 	// 若存在，则将数组的迭代器方法拷贝至 jQuery.fn
 	jQuery.fn[ Symbol.iterator ] = arr[ Symbol.iterator ];
 }

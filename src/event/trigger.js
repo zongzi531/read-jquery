@@ -22,8 +22,10 @@ define( [
 
 // 声明 rfocusMorph 赋值 正则表达式
 var rfocusMorph = /^(?:focusinfocus|focusoutblur)$/,
+
 	// 声明 stopPropagationCallback 方法
 	stopPropagationCallback = function( e ) {
+
 		// 执行 e.stopPropagation()
 		e.stopPropagation();
 	};
@@ -36,10 +38,13 @@ jQuery.extend( jQuery.event, {
 
 		// 初始化 i, cur, tmp, bubbleType, ontype, handle, special, lastElement,
 		var i, cur, tmp, bubbleType, ontype, handle, special, lastElement,
+
 			// 声明 eventPath 赋值 [ elem || document ]
 			eventPath = [ elem || document ],
+
 			// 声明 type 赋值 hasOwn.call( event, "type" ) ? event.type : event
 			type = hasOwn.call( event, "type" ) ? event.type : event,
+
 			// 声明 namespaces 赋值 hasOwn.call( event, "namespace" ) ? event.namespace.split( "." ) : []
 			namespaces = hasOwn.call( event, "namespace" ) ? event.namespace.split( "." ) : [];
 
@@ -67,11 +72,14 @@ jQuery.extend( jQuery.event, {
 			// 命名空间触发器；创建 regexp 以匹配 handle() 中的事件类型
 			// namespaces 赋值 type.split( "." )
 			namespaces = type.split( "." );
+
 			// type 赋值 namespaces.shift()
 			type = namespaces.shift();
+
 			// 执行 namespaces.sort()
 			namespaces.sort();
 		}
+
 		// ontype 赋值 type.indexOf( ":" ) < 0 && "on" + type
 		ontype = type.indexOf( ":" ) < 0 && "on" + type;
 
@@ -85,8 +93,10 @@ jQuery.extend( jQuery.event, {
 		// Trigger bitmask: & 1 for native handlers; & 2 for jQuery (always true)
 		// event.isTrigger 赋值 onlyHandlers ? 2 : 3
 		event.isTrigger = onlyHandlers ? 2 : 3;
+
 		// event.namespace 赋值 namespaces.join( "." )
 		event.namespace = namespaces.join( "." );
+
 		// event.rnamespace 赋值 event.namespace 返回 为 真 则 创建一个正则表达式 "(^|\\.)" + namespaces.join( "\\.(?:.*\\.|)" ) + "(\\.|$)" 否则 返回 null
 		event.rnamespace = event.namespace ?
 			new RegExp( "(^|\\.)" + namespaces.join( "\\.(?:.*\\.|)" ) + "(\\.|$)" ) :
@@ -96,8 +106,10 @@ jQuery.extend( jQuery.event, {
 		// 在重新使用时清理事件
 		// event.result 赋值 undefined
 		event.result = undefined;
+
 		// 判断 !event.target
 		if ( !event.target ) {
+
 			// event.target 赋值 elem
 			event.target = elem;
 		}
@@ -113,6 +125,7 @@ jQuery.extend( jQuery.event, {
 		// 允许特殊事件在线外绘制
 		// special 赋值 jQuery.event.special[ type ] 或 空对象
 		special = jQuery.event.special[ type ] || {};
+
 		// 判断 !onlyHandlers && special.trigger && special.trigger.apply( elem, data ) === false 成立 则 直接 返回
 		if ( !onlyHandlers && special.trigger && special.trigger.apply( elem, data ) === false ) {
 			return;
@@ -127,15 +140,20 @@ jQuery.extend( jQuery.event, {
 
 			// bubbleType 赋值 special.delegateType 或 type
 			bubbleType = special.delegateType || type;
+
 			// 判断 !rfocusMorph.test( bubbleType + type )
 			if ( !rfocusMorph.test( bubbleType + type ) ) {
+
 				// cur 赋值 cur.parentNode
 				cur = cur.parentNode;
 			}
+
 			// 遍历 cur
 			for ( ; cur; cur = cur.parentNode ) {
+
 				// eventPath 加入 cur
 				eventPath.push( cur );
+
 				// tmp 赋值 cur
 				tmp = cur;
 			}
@@ -144,6 +162,7 @@ jQuery.extend( jQuery.event, {
 			// 只有添加窗口才能得到文档（例如，不是纯 obj 或分离 DOM）
 			// 判断 tmp === ( elem.ownerDocument || document )
 			if ( tmp === ( elem.ownerDocument || document ) ) {
+
 				// eventPath 加入 tmp.defaultView 或 tmp.parentWindow 或 window
 				eventPath.push( tmp.defaultView || tmp.parentWindow || window );
 			}
@@ -153,10 +172,13 @@ jQuery.extend( jQuery.event, {
 		// 事件路径上的火灾处理程序
 		// i 赋值 0
 		i = 0;
+
 		// 遍历 ( cur = eventPath[ i++ ] ) && !event.isPropagationStopped() 条件
 		while ( ( cur = eventPath[ i++ ] ) && !event.isPropagationStopped() ) {
+
 			// lastElement 赋值 cur
 			lastElement = cur;
+
 			// event.type 赋值 i > 1 返回 为 真 则 bubbleType 否则 special.bindType || type
 			event.type = i > 1 ?
 				bubbleType :
@@ -167,8 +189,10 @@ jQuery.extend( jQuery.event, {
 			// handle 赋值 ( dataPriv.get( cur, "events" ) 或 空对象 )[ event.type ] && dataPriv.get( cur, "handle" )
 			handle = ( dataPriv.get( cur, "events" ) || {} )[ event.type ] &&
 				dataPriv.get( cur, "handle" );
+
 			// 判断 handle
 			if ( handle ) {
+
 				// 执行 handle( ...data )
 				handle.apply( cur, data );
 			}
@@ -177,17 +201,22 @@ jQuery.extend( jQuery.event, {
 			// 本地处理器
 			// handle 赋值 ontype && cur[ ontype ]
 			handle = ontype && cur[ ontype ];
+
 			// 判断 handle && handle.apply && acceptData( cur )
 			if ( handle && handle.apply && acceptData( cur ) ) {
+
 				// event.result 赋值 handle( ...data )
 				event.result = handle.apply( cur, data );
+
 				// 判断 event.result === false
 				if ( event.result === false ) {
+
 					// 执行 event.preventDefault()
 					event.preventDefault();
 				}
 			}
 		}
+
 		// event.type 赋值 type
 		event.type = type;
 
@@ -205,7 +234,7 @@ jQuery.extend( jQuery.event, {
 				// 调用具有与事件同名的目标上的本机DOM方法。
 				// Don't do default actions on window, that's where global variables be (#6170)
 				// 不要在窗口上执行默认操作，这是全局变量的所在。
-				// 判断 ontype && isFunction( elem[ type ] ) && !isWindow( elem 
+				// 判断 ontype && isFunction( elem[ type ] ) && !isWindow( elem )
 				if ( ontype && isFunction( elem[ type ] ) && !isWindow( elem ) ) {
 
 					// Don't re-trigger an onFOO event when we call its FOO() method
@@ -215,6 +244,7 @@ jQuery.extend( jQuery.event, {
 
 					// 判断 tmp
 					if ( tmp ) {
+
 						// elem[ ontype ] 赋值 null
 						elem[ ontype ] = null;
 					}
@@ -226,6 +256,7 @@ jQuery.extend( jQuery.event, {
 
 					// 判断 event.isPropagationStopped()
 					if ( event.isPropagationStopped() ) {
+
 						// 执行 lastElement.addEventListener( type, stopPropagationCallback )
 						lastElement.addEventListener( type, stopPropagationCallback );
 					}
@@ -235,6 +266,7 @@ jQuery.extend( jQuery.event, {
 
 					// 判断 event.isPropagationStopped()
 					if ( event.isPropagationStopped() ) {
+
 						// 执行 lastElement.removeEventListener( type, stopPropagationCallback )
 						lastElement.removeEventListener( type, stopPropagationCallback );
 					}
@@ -244,6 +276,7 @@ jQuery.extend( jQuery.event, {
 
 					// 判断 tmp
 					if ( tmp ) {
+
 						// elem[ ontype ] 赋值 tmp
 						elem[ ontype ] = tmp;
 					}
@@ -261,6 +294,7 @@ jQuery.extend( jQuery.event, {
 	// 仅用于 `focus(in | out)` 事件
 	// simulate 方法
 	simulate: function( type, elem, event ) {
+
 		// 声明 e 赋值 执行 jQuery.extend 后 返回的结果
 		// 合并 new jQuery.Event() 和 event 和 第三参数对象
 		var e = jQuery.extend(
@@ -284,19 +318,25 @@ jQuery.fn.extend( {
 	// trigger 方法
 	// 描述: 根据绑定到匹配元素的给定的事件类型执行所有的处理程序和行为。
 	trigger: function( type, data ) {
+
 		// 返回 this.each 遍历回调
 		return this.each( function() {
+
 			// 执行 jQuery.event.trigger( type, data, this )
 			jQuery.event.trigger( type, data, this );
 		} );
 	},
+
 	// triggerHandler 方法
 	// 描述: 为一个事件执行附加到元素的所有处理程序。
 	triggerHandler: function( type, data ) {
+
 		// 声明 elem 赋值 this[ 0 ]
 		var elem = this[ 0 ];
+
 		// 判断 elem
 		if ( elem ) {
+
 			// 返回 jQuery.event.trigger( type, data, elem, true )
 			return jQuery.event.trigger( type, data, elem, true );
 		}
